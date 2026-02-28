@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stonebranch Hub — Internal Dashboard</title>
+  <meta name="description" content="Internal hub for Stonebranch at Lake Martin — links, status, and project overview." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ---- Reset & Tokens ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest:     #1b2a1c;
+      --forest-mid: #243327;
+      --moss:       #3d5440;
+      --sage:       #6b7c5c;
+      --gold:       #b89054;
+      --gold-light: #d4ae78;
+      --cream:      #f2ece0;
+      --parchment:  #e8e0d0;
+      --sand:       #c4b49a;
+      --stone:      #7a7065;
+      --bark:       #3a2e24;
+      --charcoal:   #1e1c1a;
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', -apple-system, sans-serif;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      background: var(--charcoal);
+      color: var(--cream);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ---- Layout ---- */
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    /* ---- Header ---- */
+    .hub-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(184, 144, 84, 0.2);
+    }
+
+    .hub-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hub-mark {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+
+    .hub-mark span {
+      color: var(--gold);
+    }
+
+    .hub-sub {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .hub-meta {
+      text-align: right;
+    }
+
+    .hub-meta-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 0.25rem;
+    }
+
+    .hub-meta-value {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: rgba(242, 236, 224, 0.7);
+    }
+
+    /* ---- Section headers ---- */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184, 144, 84, 0.2);
+    }
+
+    /* ---- Overview ---- */
+    .overview {
+      background: var(--forest);
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .overview-title {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+
+    .overview-body {
+      font-size: 0.9rem;
+      color: rgba(242, 236, 224, 0.6);
+      line-height: 1.75;
+      max-width: 540px;
+    }
+
+    .overview-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 160px;
+    }
+
+    .stat {
+      text-align: right;
+    }
+
+    .stat-num {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.75;
+    }
+
+    /* ---- Dates ---- */
+    .dates-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .date-card {
+      background: var(--forest-mid);
+      padding: 1.5rem;
+      border-left: 2px solid var(--gold);
+    }
+
+    .date-card__label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 0.5rem;
+    }
+
+    .date-card__date {
+      font-family: var(--font-serif);
+      font-size: 1.375rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.25rem;
+    }
+
+    .date-card__note {
+      font-size: 0.8rem;
+      color: rgba(242, 236, 224, 0.45);
+      line-height: 1.5;
+    }
+
+    /* ---- Status Cards ---- */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .status-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(242, 236, 224, 0.08);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .status-card:hover {
+      border-color: rgba(184, 144, 84, 0.3);
+    }
+
+    .status-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .status-card__name {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .badge {
+      font-family: var(--font-sans);
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0;
+    }
+
+    .badge--live      { background: rgba(107, 124, 92, 0.2); color: #8fb87a; border: 1px solid rgba(107, 124, 92, 0.4); }
+    .badge--pending   { background: rgba(184, 144, 84, 0.15); color: var(--gold); border: 1px solid rgba(184, 144, 84, 0.3); }
+    .badge--needs-setup { background: rgba(180, 100, 60, 0.12); color: #d4886a; border: 1px solid rgba(180, 100, 60, 0.3); }
+    .badge--building  { background: rgba(107, 124, 92, 0.12); color: var(--sage); border: 1px solid rgba(107, 124, 92, 0.25); }
+
+    .status-card__title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: var(--cream);
+    }
+
+    .status-card__desc {
+      font-size: 0.85rem;
+      color: rgba(242, 236, 224, 0.45);
+      line-height: 1.65;
+    }
+
+    .status-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: auto;
+      padding-top: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .status-card__link:hover {
+      color: var(--gold-light);
+    }
+
+    .status-card__link::after {
+      content: '→';
+    }
+
+    /* ---- Construction Progress ---- */
+    .construction-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .progress-card {
+      background: var(--forest);
+      padding: 1.75rem;
+    }
+
+    .progress-card__label {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 0.625rem;
+    }
+
+    .progress-card__title {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.375rem;
+    }
+
+    .progress-card__status {
+      font-size: 0.8rem;
+      color: rgba(242, 236, 224, 0.5);
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      height: 2px;
+      background: rgba(242, 236, 224, 0.1);
+      width: 100%;
+    }
+
+    .progress-bar__fill {
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .progress-pct {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-top: 0.375rem;
+      text-align: right;
+    }
+
+    /* ---- Setup checklist ---- */
+    .setup-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .setup-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(242, 236, 224, 0.06);
+    }
+
+    .setup-item__check {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      border: 1.5px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+      font-size: 0.65rem;
+    }
+
+    .setup-item__check--done   { border-color: #8fb87a; color: #8fb87a; background: rgba(107,124,92,0.15); }
+    .setup-item__check--todo   { border-color: rgba(242, 236, 224, 0.2); color: transparent; }
+    .setup-item__check--urgent { border-color: var(--gold); color: var(--gold); }
+
+    .setup-item__content { flex: 1; }
+
+    .setup-item__title {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--cream);
+      margin-bottom: 0.25rem;
+    }
+
+    .setup-item__note {
+      font-size: 0.8rem;
+      color: rgba(242, 236, 224, 0.4);
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8em;
+      background: rgba(255,255,255,0.07);
+      padding: 0.1em 0.4em;
+      color: var(--gold-light);
+    }
+
+    /* ---- Footer ---- */
+    .hub-footer {
+      padding-top: 3rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(242, 236, 224, 0.07);
+      text-align: center;
+    }
+
+    .hub-footer-text {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: rgba(242, 236, 224, 0.25);
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      .overview { grid-template-columns: 1fr; }
+      .overview-stats { flex-direction: row; justify-content: flex-start; }
+      .stat { text-align: left; }
+      .dates-grid { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: 1fr; }
+      .construction-grid { grid-template-columns: 1fr; }
+      .hub-header { flex-direction: column; }
+      .hub-meta { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ============ HEADER ============ -->
+    <header class="hub-header">
+      <div class="hub-brand">
+        <div class="hub-mark">Stonebranch <span>Hub</span></div>
+        <div class="hub-sub">Internal Dashboard &ensp;·&ensp; Vulcan OZB, LLC</div>
+      </div>
+      <div class="hub-meta">
+        <div class="hub-meta-label">Property</div>
+        <div class="hub-meta-value">Lake Martin, Alabama</div>
+      </div>
+    </header>
+
+    <!-- ============ OVERVIEW ============ -->
+    <div class="section-label">Property Overview</div>
+    <div class="overview">
+      <div>
+        <h2 class="overview-title">Stonebranch at Lake Martin</h2>
+        <p class="overview-body">
+          97-acre cabin retreat on the northern shore of Lake Martin, along Elkahatchee Creek in
+          Alexander City, Alabama. Four private cabin residences under construction —
+          two two-suite ($450/night) and two three-suite ($650/night). Future event venue planned.
+          Booking via Resy when open. Domain: StoneBranchLakeMartin.com (DNS pending).
+        </p>
+      </div>
+      <div class="overview-stats">
+        <div class="stat">
+          <div class="stat-num">97</div>
+          <div class="stat-lbl">Acres</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">4</div>
+          <div class="stat-lbl">Cabins</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-lbl">Planned Total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ KEY DATES ============ -->
+    <div class="section-label">Key Dates &amp; Milestones</div>
+    <div class="dates-grid">
+      <div class="date-card">
+        <div class="date-card__label">Target Opening</div>
+        <div class="date-card__date">2025</div>
+        <div class="date-card__note">Initial 4 cabins open for reservations. Exact date TBD.</div>
+      </div>
+      <div class="date-card">
+        <div class="date-card__label">Venue Phase</div>
+        <div class="date-card__date">TBD</div>
+        <div class="date-card__note">Event venue construction to follow cabin completion.</div>
+      </div>
+      <div class="date-card">
+        <div class="date-card__label">Cabins 5 &amp; 6</div>
+        <div class="date-card__date">Future</div>
+        <div class="date-card__note">Two additional cabin units planned for second phase.</div>
+      </div>
+    </div>
+
+    <!-- ============ SUBSITES ============ -->
+    <div class="section-label">Subsites &amp; Resources</div>
+    <div class="status-grid">
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Stonebranch Website</span>
+          <span class="badge badge--live">Live</span>
+        </div>
+        <div class="status-card__title">Full Property Site</div>
+        <div class="status-card__desc">
+          Cabin details, construction progress, location info, and waitlist.
+          Deployed on GitHub Pages from the <code>staging</code> branch.
+        </div>
+        <a href="https://krogsgard.github.io/stonebranch-website/" class="status-card__link" target="_blank" rel="noopener">
+          Open Site
+        </a>
+      </div>
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Custom Domain</span>
+          <span class="badge badge--needs-setup">DNS Pending</span>
+        </div>
+        <div class="status-card__title">StoneBranchLakeMartin.com</div>
+        <div class="status-card__desc">
+          Domain registered. DNS not yet pointed to hosting. Needs to be directed to
+          Cloudflare Pages or GitHub Pages when ready to go live publicly.
+        </div>
+        <span class="status-card__link" style="color: var(--stone); cursor: default;">
+          Awaiting Setup
+        </span>
+      </div>
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Cloudflare Pages</span>
+          <span class="badge badge--needs-setup">Not Active</span>
+        </div>
+        <div class="status-card__title">Production Hosting (Planned)</div>
+        <div class="status-card__desc">
+          Original platform. Needs Cloudflare Pages project connected to <code>krogsgard/stonebranch-website</code>.
+          Requires D1 database setup for email signup functionality.
+        </div>
+        <span class="status-card__link" style="color: var(--stone); cursor: default;">
+          Needs Setup
+        </span>
+      </div>
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Email Signups / D1</span>
+          <span class="badge badge--needs-setup">Not Configured</span>
+        </div>
+        <div class="status-card__title">Cloudflare D1 Database</div>
+        <div class="status-card__desc">
+          Run: <code>wrangler d1 create stonebranch-emails</code><br />
+          Paste ID into <code>wrangler.toml</code>, then run schema.sql.<br />
+          Set D1 binding <code>DB</code> in CF Pages dashboard.
+        </div>
+        <span class="status-card__link" style="color: var(--stone); cursor: default;">
+          Brian Action Required
+        </span>
+      </div>
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Resy Booking</span>
+          <span class="badge badge--pending">Pre-Launch</span>
+        </div>
+        <div class="status-card__title">Reservation Platform</div>
+        <div class="status-card__desc">
+          Decided on Resy for guest reservations. Setup not yet started —
+          wait until closer to cabin opening to configure listings.
+        </div>
+        <span class="status-card__link" style="color: var(--stone); cursor: default;">
+          Not Yet Active
+        </span>
+      </div>
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Event Venue</span>
+          <span class="badge badge--pending">Planned</span>
+        </div>
+        <div class="status-card__title">Stonebranch Venue Site</div>
+        <div class="status-card__desc">
+          Dedicated venue microsite for weddings, retreats, and private events.
+          To be built after cabins open. Concept only at this stage.
+        </div>
+        <span class="status-card__link" style="color: var(--stone); cursor: default;">
+          Future Phase
+        </span>
+      </div>
+
+    </div>
+
+    <!-- ============ CONSTRUCTION ============ -->
+    <div class="section-label">Construction Status</div>
+    <div class="construction-grid">
+      <div class="progress-card">
+        <div class="progress-card__label">Cabin Type A · Two-Suite · ×2 Units</div>
+        <div class="progress-card__title">Cabin One &amp; Two</div>
+        <div class="progress-card__status">Framing complete. Interior work underway.</div>
+        <div class="progress-bar"><div class="progress-bar__fill" style="width: 60%"></div></div>
+        <div class="progress-pct">~60% complete</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-card__label">Cabin Type B · Three-Suite · ×2 Units</div>
+        <div class="progress-card__title">Cabin Three &amp; Four</div>
+        <div class="progress-card__status">Foundation complete. Framing in progress.</div>
+        <div class="progress-bar"><div class="progress-bar__fill" style="width: 35%"></div></div>
+        <div class="progress-pct">~35% complete</div>
+      </div>
+    </div>
+
+    <!-- ============ SETUP CHECKLIST ============ -->
+    <div class="section-label">Setup Checklist — Brian Action Items</div>
+    <div class="setup-list">
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--done">✓</div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">GitHub repo created — stonebranch-website</div>
+          <div class="setup-item__note">krogsgard/stonebranch-website · Astro 5 · GitHub Pages active</div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--done">✓</div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">GitHub repo created — stonebranch-hub</div>
+          <div class="setup-item__note">krogsgard/stonebranch-hub · This dashboard · GitHub Pages active</div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--urgent">!</div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Enable GitHub Pages for stonebranch-website</div>
+          <div class="setup-item__note">
+            GitHub → krogsgard/stonebranch-website → Settings → Pages → Source: GitHub Actions.
+            Then push to <code>staging</code> branch to trigger deploy.
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--urgent">!</div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Enable GitHub Pages for stonebranch-hub</div>
+          <div class="setup-item__note">
+            GitHub → krogsgard/stonebranch-hub → Settings → Pages → Source: GitHub Actions.
+            Then push to <code>main</code> branch to trigger deploy.
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--todo"></div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Create Cloudflare D1 database for email signups</div>
+          <div class="setup-item__note">
+            <code>wrangler d1 create stonebranch-emails</code> →
+            paste ID into <code>wrangler.toml</code> →
+            run <code>wrangler d1 execute stonebranch-emails --file=./schema.sql</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--todo"></div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Set up Cloudflare Pages project for production</div>
+          <div class="setup-item__note">
+            CF Pages → Create project → Connect repo → main=Production, staging=Preview.
+            Set D1 binding: Variable <code>DB</code> → stonebranch-emails.
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--todo"></div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Point DNS for StoneBranchLakeMartin.com</div>
+          <div class="setup-item__note">Domain registered. When ready to go public, point to Cloudflare Pages or GitHub Pages.</div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--todo"></div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Configure Resy for cabin reservations</div>
+          <div class="setup-item__note">Do this closer to opening. Resy is the chosen booking platform.</div>
+        </div>
+      </div>
+
+      <div class="setup-item">
+        <div class="setup-item__check setup-item__check--todo"></div>
+        <div class="setup-item__content">
+          <div class="setup-item__title">Update email address for waitlist contact</div>
+          <div class="setup-item__note">
+            Replace <code>info@stonebranchlakemartin.com</code> placeholder in the website's
+            mailto link with the real contact email once set up.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="hub-footer">
+      <p class="hub-footer-text">
+        Stonebranch Hub &ensp;·&ensp; Internal use only &ensp;·&ensp; Vulcan OZB, LLC &ensp;·&ensp;
+        Updated February 2026
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>
