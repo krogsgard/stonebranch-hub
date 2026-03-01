@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Discovery Document — Stonebranch Hub</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Palette derived from Farrow & Ball:
+       Reduced Green #313 (#5d594b), Dibber #312 (#7f775b),
+       Stony Ground #211 (#cec1ad), Marmelo #316 (#a36f4d) */
+    :root {
+      --forest:     #2d2b26;
+      --forest-mid: #383530;
+      --moss:       #5d594b;
+      --sage:       #7f775b;
+      --gold:       #a36f4d;
+      --gold-light: #c08e6e;
+      --cream:      #e4dacb;
+      --parchment:  #cec1ad;
+      --sand:       #b0a590;
+      --stone:      #8a8172;
+      --bark:       #3a3630;
+      --charcoal:   #22211e;
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', -apple-system, sans-serif;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      background: var(--charcoal);
+      color: var(--cream);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { color: var(--gold-light); }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    /* Header */
+    .doc-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(184, 144, 84, 0.2);
+    }
+
+    .back-link {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--gold); }
+    .back-link::before { content: '\2190'; }
+
+    .doc-title {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .doc-subtitle {
+      font-size: 0.85rem;
+      color: var(--stone);
+    }
+
+    .doc-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .doc-meta-item {
+      font-size: 0.75rem;
+      color: rgba(242, 236, 224, 0.5);
+    }
+
+    .doc-meta-item strong {
+      color: rgba(242, 236, 224, 0.7);
+      font-weight: 500;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--forest);
+      padding: 2rem 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .toc-label {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+    }
+
+    .toc li {
+      counter-increment: toc;
+      margin-bottom: 0.5rem;
+    }
+
+    .toc li::before {
+      content: counter(toc) '.';
+      color: var(--stone);
+      margin-right: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .toc a {
+      font-size: 0.9rem;
+      color: var(--cream);
+      transition: color 0.2s;
+    }
+
+    .toc a:hover { color: var(--gold); }
+
+    /* Sections */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(184, 144, 84, 0.2);
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    h4 {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--gold-light);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: rgba(242, 236, 224, 0.7);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      max-width: 680px;
+    }
+
+    ul, ol {
+      margin-bottom: 1rem;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      font-size: 0.9rem;
+      color: rgba(242, 236, 224, 0.65);
+      line-height: 1.7;
+      margin-bottom: 0.35rem;
+    }
+
+    li strong {
+      color: var(--cream);
+      font-weight: 500;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      font-weight: 500;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(184, 144, 84, 0.25);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.625rem 1rem;
+      color: rgba(242, 236, 224, 0.65);
+      border-bottom: 1px solid rgba(242, 236, 224, 0.06);
+      vertical-align: top;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* Callout boxes */
+    .callout {
+      background: var(--forest);
+      border-left: 2px solid var(--gold);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .callout p {
+      margin-bottom: 0;
+      color: rgba(242, 236, 224, 0.6);
+    }
+
+    .callout strong {
+      color: var(--cream);
+    }
+
+    .callout--rec {
+      border-left-color: var(--sage);
+    }
+
+    /* Code / pre */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8em;
+      background: rgba(255,255,255,0.07);
+      padding: 0.1em 0.4em;
+      color: var(--gold-light);
+    }
+
+    pre {
+      background: var(--forest);
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(242, 236, 224, 0.6);
+    }
+
+    /* Highlight row */
+    .highlight-row td {
+      color: var(--cream);
+      font-weight: 400;
+    }
+
+    /* Footer */
+    .doc-footer {
+      padding-top: 3rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(242, 236, 224, 0.07);
+      text-align: center;
+    }
+
+    .doc-footer-text {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: rgba(242, 236, 224, 0.25);
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .doc-meta { flex-direction: column; gap: 0.5rem; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 0.5rem 0.625rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <a href="index.html" class="back-link">Back to Hub</a>
+      <h1 class="doc-title">Discovery Document</h1>
+      <div class="doc-subtitle">Stonebranch at Lake Martin &mdash; Research &amp; Recommendations</div>
+      <div class="doc-meta">
+        <div class="doc-meta-item"><strong>Prepared by:</strong> May</div>
+        <div class="doc-meta-item"><strong>Date:</strong> February 2026</div>
+        <div class="doc-meta-item"><strong>Entity:</strong> Under Vulcan OZB, LLC</div>
+        <div class="doc-meta-item"><strong>Property:</strong> 97 acres, Elkahatchee Creek, Alexander City, AL</div>
+      </div>
+    </div>
+
+    <!-- Key Facts -->
+    <div class="callout">
+      <p><strong>Use:</strong> Short-term cabin rentals, small retreats/gatherings, limited events<br />
+      <strong>Timeline:</strong> Permits expected mid-March 2026 &rarr; 7-month build &rarr; OZ placed-in-service deadline 12/31/2026</p>
+    </div>
+
+    <!-- TOC -->
+    <div class="toc">
+      <div class="toc-label">Contents</div>
+      <ol>
+        <li><a href="#brand">Brand &amp; Digital Presence</a></li>
+        <li><a href="#booking">Booking &amp; Revenue</a></li>
+        <li><a href="#devtools">Development Phase Tools</a></li>
+        <li><a href="#operations">Property Operations</a></li>
+        <li><a href="#sequence">Recommended Build Sequence</a></li>
+      </ol>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: BRAND & DIGITAL PRESENCE          -->
+    <!-- ============================================ -->
+    <div class="section-label" id="brand">1 &mdash; Brand &amp; Digital Presence</div>
+
+    <h3>Domain Availability</h3>
+    <p><code>stonebranch.com</code> is taken &mdash; large enterprise IT automation company. Do not pursue.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Domain</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr class="highlight-row"><td><code>stonebranchlakemartin.com</code></td><td>Clean, descriptive, memorable &mdash; <strong>top recommendation</strong></td></tr>
+          <tr><td><code>stonebranchretreat.com</code></td><td>Positions as destination retreat</td></tr>
+          <tr><td><code>stonebranchcabins.com</code></td><td>Direct/functional, good for OTA competitors</td></tr>
+          <tr><td><code>stonebranchal.com</code></td><td>Short, if you want to drop "lake martin"</td></tr>
+          <tr><td><code>elkahatchee.com</code></td><td>The creek corridor itself &mdash; interesting brand option, harder to spell</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout--rec">
+      <p><strong>Recommendation:</strong> <code>stonebranchlakemartin.com</code> &mdash; specific, ranks well for local search, differentiates from the IT company, and the full-phrase URL helps SEO for guests searching &ldquo;Lake Martin cabins.&rdquo;</p>
+    </div>
+
+    <h3>Competitive Landscape</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Property</th><th>Type</th><th>Differentiator</th><th>Price Range</th><th>Gap</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Destination Glamping</strong></td>
+            <td>Tent glamping</td>
+            <td>Top-10 USA recognition</td>
+            <td>$300&ndash;600/nt</td>
+            <td>No permanent cabins</td>
+          </tr>
+          <tr>
+            <td><strong>Timberline Glamping</strong></td>
+            <td>State park glamping</td>
+            <td>Location/price</td>
+            <td>$150&ndash;300/nt</td>
+            <td>No premium positioning</td>
+          </tr>
+          <tr>
+            <td><strong>Airbnb/VRBO homes</strong></td>
+            <td>Private homes</td>
+            <td>Volume/variety</td>
+            <td>$134&ndash;700+/nt</td>
+            <td>No brand, no group focus</td>
+          </tr>
+          <tr>
+            <td><strong>Wind Creek Cabins</strong></td>
+            <td>State park cabins</td>
+            <td>Lakefront/price</td>
+            <td>$50&ndash;150/nt</td>
+            <td>Not premium</td>
+          </tr>
+          <tr class="highlight-row">
+            <td><strong>Stonebranch</strong></td>
+            <td><strong>Cabin retreat</strong></td>
+            <td><strong>Brand, cohesion, group focus</strong></td>
+            <td><strong>$450&ndash;650+/nt</strong></td>
+            <td><strong>Your position</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Brand Positioning</h3>
+    <p><strong>Archetype:</strong> The Caretaker/Sanctuary. Not flashy, not influencer bait &mdash; considered, intentional, high-quality.</p>
+    <p><strong>Tone:</strong> Calm, rooted, unhurried.</p>
+
+    <div class="callout">
+      <p>&ldquo;The water&rsquo;s been here for 70 years. We&rsquo;ll be here for a while too.&rdquo;</p>
+      <p style="margin-top: 0.75rem;">&ldquo;97 acres of Alabama forest, one creek, no noise. Bring the people worth it.&rdquo;</p>
+    </div>
+
+    <h4>Target Audiences (priority order)</h4>
+    <ol>
+      <li><strong>Group retreats / gatherings (2&ndash;4 cabins)</strong> &mdash; corporate retreats, family reunions, friend weekends, church retreats. Highest-revenue, hardest-to-serve segment that nobody owns in this market.</li>
+      <li><strong>Couples seeking nature-premium stays</strong> &mdash; $450&ndash;650/night is accessible for 30s&ndash;50s couples.</li>
+      <li><strong>Event anchors</strong> &mdash; weddings and larger events come Phase 2+ once capacity and operations are in place.</li>
+      <li><strong>Extended retreats (4&ndash;7 nights)</strong> &mdash; writers, remote workers, families on week-long lake trips.</li>
+    </ol>
+
+    <h4>Key Differentiators</h4>
+    <ul>
+      <li>Purpose-built, not someone&rsquo;s lake house being rented out</li>
+      <li>Unified brand and quality across all cabins</li>
+      <li>The land itself: 97 acres, creek corridor, wooded/rolling</li>
+      <li>Group-focused (multiple cabins can be booked together)</li>
+      <li>OZ/mission story is interesting but don&rsquo;t lead with it publicly &mdash; investor/press story, not guest story</li>
+    </ul>
+
+    <h3>Website Scope</h3>
+    <p><strong>Technology:</strong> Astro (consistent with Weygand stack). Reuse components, deployment patterns, and muscle memory.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Page</th><th>Priority</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Home</td><td>P0</td><td>Brand statement, photography, book a stay CTA</td></tr>
+          <tr><td>The Property</td><td>P0</td><td>97 acres, the creek, the land &mdash; storytelling</td></tr>
+          <tr><td>Cabins</td><td>P0</td><td>Each cabin with specs, photos, pricing, book button</td></tr>
+          <tr><td>Group Retreats</td><td>P1</td><td>Package page for multi-cabin bookings, inquiry form</td></tr>
+          <tr><td>Availability / Book</td><td>P0</td><td>Embedded booking widget or redirect to booking platform</td></tr>
+          <tr><td>FAQ</td><td>P1</td><td>Check-in/out, pets, policies, nearby things to do</td></tr>
+          <tr><td>Contact</td><td>P1</td><td>Simple form + email</td></tr>
+          <tr><td>About</td><td>P2</td><td>The backstory, Brian/entity info if desired</td></tr>
+          <tr><td>Events</td><td>P2</td><td>Weddings/events &mdash; add when capacity exists</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Photography &amp; Content Strategy</h3>
+    <p>The property exists now &mdash; 97 acres of land is photogenic even without cabins.</p>
+
+    <h4>Pre-construction content to capture</h4>
+    <ul>
+      <li>Aerial drone footage of the full 97 acres, creek corridor, Lake Martin visible</li>
+      <li>Ground-level trail walks &mdash; morning golden hour light through trees</li>
+      <li>The pond</li>
+      <li>Creek shots &mdash; water movement, reflections, the &ldquo;feel&rdquo; of the land</li>
+      <li>Any existing structures or clearings</li>
+    </ul>
+
+    <h4>Recommended channels</h4>
+    <ul>
+      <li><strong>Instagram</strong> &mdash; primary visual platform for this category</li>
+      <li><strong>Google Business Profile</strong> &mdash; critical for &ldquo;Lake Martin cabin&rdquo; local search</li>
+      <li><strong>Facebook</strong> &mdash; reach 40s&ndash;60s demographic for family reunions/group bookings</li>
+      <li><strong>Pinterest</strong> &mdash; drives significant hospitality/travel discovery</li>
+    </ul>
+
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: BOOKING & REVENUE                 -->
+    <!-- ============================================ -->
+    <div class="section-label" id="booking">2 &mdash; Booking &amp; Revenue</div>
+
+    <h3>Channel Strategy</h3>
+    <p>For a new property with no reviews and no brand recognition, <strong>OTA-first is the right call.</strong> Direct bookings come after you&rsquo;ve accumulated reviews and brand awareness.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Channel</th><th>Pros</th><th>Cons</th><th>Fee</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Airbnb</strong></td><td>Largest audience, guest trust, insurance, payment infra</td><td>3% host fee, guests pay 14&ndash;16% service fee</td><td>3%</td></tr>
+          <tr><td><strong>VRBO</strong></td><td>Strong family/group audience</td><td>Annual sub or 8% per-booking fee</td><td>5&ndash;8%</td></tr>
+          <tr><td><strong>Booking.com</strong></td><td>International reach</td><td>15&ndash;18% commission, disputes messy</td><td>15&ndash;18%</td></tr>
+          <tr><td><strong>Google Vacation Rentals</strong></td><td>Free to list via PMS</td><td>Requires booking engine to connect</td><td>Free</td></tr>
+          <tr><td><strong>Direct (your site)</strong></td><td>Zero commission, guest data, repeat relationships</td><td>Requires established brand + SEO</td><td>Stripe ~2.9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout--rec">
+      <p><strong>Phase 1:</strong> Launch on Airbnb + VRBO simultaneously via a channel manager (OwnerRez or Hospitable).<br />
+      <strong>Phase 2:</strong> Build direct booking engine after 20+ Airbnb reviews. Offer 5&ndash;10% discount for direct bookings.</p>
+    </div>
+
+    <h3>Booking Platform Comparison</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Price</th><th>Best For</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr class="highlight-row"><td><strong>OwnerRez</strong></td><td>~$40/mo + $5/property</td><td>5+ properties, owner-operator</td><td>Right tool at 3+ cabins</td></tr>
+          <tr><td><strong>Hospitable</strong></td><td>$29/mo + $10/property</td><td>1&ndash;5 properties, simple + done</td><td>Excellent for Phase 1</td></tr>
+          <tr><td><strong>Lodgify</strong></td><td>$12&ndash;59/mo</td><td>Direct-booking-first</td><td>Good but OwnerRez + Astro is better</td></tr>
+          <tr><td><strong>Guesty Lite</strong></td><td>$16&ndash;23/mo</td><td>20+ diverse properties</td><td>Skip &mdash; overkill</td></tr>
+          <tr><td><strong>Hostaway</strong></td><td>$100&ndash;400/mo</td><td>Enterprise PM companies</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout--rec">
+      <p><strong>Phase 0 (1 cabin):</strong> Airbnb only, native tools.<br />
+      <strong>Phase 1 (2&ndash;4 cabins):</strong> Hospitable + Airbnb + VRBO.<br />
+      <strong>Phase 2 (5+ cabins):</strong> OwnerRez + direct booking site.</p>
+    </div>
+
+    <h3>Lake Martin Pricing</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Season</th><th>Demand</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Memorial Day &ndash; Labor Day</td><td>Peak</td><td>Water activities. 90%+ occupancy realistic.</td></tr>
+          <tr><td>Auburn Football (Sept&ndash;Nov weekends)</td><td>Strong</td><td>Weekend rates can price up 20&ndash;30%.</td></tr>
+          <tr><td>Spring (March&ndash;May)</td><td>Growing</td><td>Nature retreats, shoulder season.</td></tr>
+          <tr><td>Winter (Dec&ndash;Feb)</td><td>Slow</td><td>Fire pits, cozy appeal. Expect 30&ndash;40% occupancy.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Suggested pricing structure</h4>
+    <ul>
+      <li>Base rates: $450/2BR, $650/3BR</li>
+      <li>Peak summer premium: +20&ndash;30%</li>
+      <li>Weekend premium: +15% year-round</li>
+      <li>Multi-cabin retreat discount: &minus;5&ndash;10% when booking 2+ cabins together</li>
+      <li>Minimum stays: 2 nights standard, 3 nights on summer weekends, 5&ndash;7 nights July 4 week</li>
+    </ul>
+
+    <h3>Revenue Projection</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Cabins</th><th>Gross (mix 2BR/3BR)</th><th>Net (50%)</th></tr></thead>
+        <tbody>
+          <tr><td>Phase 1</td><td>4 cabins</td><td>~$370,000</td><td>$165,000&ndash;185,000</td></tr>
+          <tr><td>Phase 2</td><td>8 cabins</td><td>~$740,000</td><td>$330,000&ndash;370,000</td></tr>
+          <tr><td>Phase 3</td><td>12+ cabins</td><td>$1.1M+</td><td>$490,000&ndash;550,000+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 0.8rem; color: var(--stone);">Assumes 50% occupancy, $450/2BR &amp; $650/3BR base rates.</p>
+
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: DEVELOPMENT PHASE TOOLS           -->
+    <!-- ============================================ -->
+    <div class="section-label" id="devtools">3 &mdash; Development Phase Tools</div>
+
+    <h3>Project Management</h3>
+    <p><strong>Monday.com can serve this.</strong> Brian already uses it for Weygand. Keep a single tool for all operations.</p>
+
+    <h4>Recommended boards</h4>
+    <ul>
+      <li><strong>Board 1 &mdash; Construction Timeline:</strong> Groups by phase (Permits, Site Prep, Foundation, Cabin Builds, Utilities, Landscaping, Final Inspections). OZ deadline pinned visibly.</li>
+      <li><strong>Board 2 &mdash; Budget &amp; Draws:</strong> Budget item, estimated cost, actual cost, draw #, payment date, invoice #, variance. Subitems for line items.</li>
+      <li><strong>Board 3 &mdash; Document Checklist:</strong> Permits, Contracts, Insurance, Warranties, CO&rsquo;s. Link to Google Drive via URL column.</li>
+    </ul>
+
+    <div class="callout callout--rec">
+      <p><strong>Recommendation:</strong> Monday.com, new workspace for Stonebranch, separate from Weygand. Don&rsquo;t mix the two.</p>
+    </div>
+
+    <h3>Google Drive Structure</h3>
+    <pre>Stonebranch at Lake Martin/
+  01 - Legal &amp; Entity/
+  02 - Permits &amp; Zoning/
+  03 - Construction/
+  04 - Finance/
+  05 - Operations/
+  06 - Marketing/</pre>
+
+    <h3>Timeline &amp; OZ Critical Path</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Milestone</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Mid-March</td><td>Permits approved</td><td>Clock starts</td></tr>
+          <tr><td>Late March</td><td>Break ground</td><td>OZB property basis clock begins</td></tr>
+          <tr><td>April&ndash;May</td><td>Foundation work</td><td>Phase 1 cabins</td></tr>
+          <tr><td>June&ndash;August</td><td>Framing, rough-ins, roofing</td><td>&mdash;</td></tr>
+          <tr><td>Sept&ndash;October</td><td>Finishes, fixtures, punch list</td><td>&mdash;</td></tr>
+          <tr><td>Mid-October</td><td>Target CO</td><td>Placed-in-service for OZ purposes</td></tr>
+          <tr class="highlight-row"><td><strong>12/31/2026</strong></td><td><strong>Hard OZ deadline</strong></td><td><strong>Property MUST be placed in service</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p><strong>Buffer:</strong> 2.5 months between target CO (mid-October) and OZ deadline (Dec 31). If permits slip 4+ weeks, buffer shrinks to 2 months. Track weekly once construction begins.</p>
+    </div>
+
+
+    <!-- ============================================ -->
+    <!-- SECTION 4: PROPERTY OPERATIONS               -->
+    <!-- ============================================ -->
+    <div class="section-label" id="operations">4 &mdash; Property Operations</div>
+
+    <h3>Guest Communications</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Trigger</th><th>Message</th><th>Channel</th></tr></thead>
+        <tbody>
+          <tr><td>Booking confirmed</td><td>Confirmation + welcome</td><td>Email</td></tr>
+          <tr><td>7 days before arrival</td><td>Pre-arrival guide, directions</td><td>Email</td></tr>
+          <tr><td>1 day before arrival</td><td>Check-in instructions, lock code</td><td>Email + SMS</td></tr>
+          <tr><td>Day of check-in</td><td>&ldquo;You should be arriving today&rdquo;</td><td>SMS</td></tr>
+          <tr><td>Day 2 of stay</td><td>Mid-stay check-in</td><td>SMS</td></tr>
+          <tr><td>Day before checkout</td><td>Checkout instructions, review request</td><td>Email</td></tr>
+          <tr><td>2 days after checkout</td><td>Review request reminder</td><td>Email</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Smart Locks</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Lock</th><th>Strength</th><th>Price</th><th>Best For</th></tr></thead>
+        <tbody>
+          <tr class="highlight-row"><td><strong>Schlage Encode Plus</strong></td><td>Grade 1 security, built-in WiFi, 100 access codes, Airbnb auto-codes</td><td>$209&ndash;252</td><td>If WiFi is strong</td></tr>
+          <tr><td><strong>Igloohome Smart Deadbolt 2S</strong></td><td>Offline PIN codes (no internet needed)</td><td>~$152</td><td>If WiFi is spotty</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout--rec">
+      <p><strong>Recommendation:</strong> Buy one of each, test at first cabin. Both integrate with OwnerRez/Hospitable via RemoteLock for auto guest codes.</p>
+    </div>
+
+    <h3>Cleaning / Turnover</h3>
+    <ul>
+      <li><strong>Turno</strong> (Phase 1) &mdash; auto-schedules from Airbnb/VRBO bookings, photo checklists, cleaner marketplace. First property free.</li>
+      <li><strong>ResortCleaning</strong> (8+ cabins) &mdash; full operations platform, $5&ndash;7/property/month.</li>
+      <li>Turnover cost: ~$100&ndash;200/cabin for 2&ndash;3BR in Lake Martin area.</li>
+      <li><strong>Pro tip:</strong> Identify cleaning team before you open. In rural markets, cleaning is the operational bottleneck.</li>
+    </ul>
+
+    <h3>Review Management</h3>
+    <ul>
+      <li>Automate the ask &mdash; Hospitable/OwnerRez send post-checkout review requests automatically.</li>
+      <li>Respond to every review publicly &mdash; even 5-star.</li>
+      <li>Target 10 Airbnb reviews in first 3 months &mdash; search ranking threshold.</li>
+      <li>Mid-stay check-in catches problems before they become review issues.</li>
+    </ul>
+
+
+    <!-- ============================================ -->
+    <!-- SECTION 5: RECOMMENDED BUILD SEQUENCE        -->
+    <!-- ============================================ -->
+    <div class="section-label" id="sequence">5 &mdash; Recommended Build Sequence</div>
+
+    <h3>Phase 0 &mdash; Now (Pre-Permit)</h3>
+    <p>Everything here is valid regardless of rezoning outcome.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Item</th><th>Action</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Domain registration</td><td>Register stonebranchlakemartin.com + 1&ndash;2 backups</td><td>$30&ndash;50</td></tr>
+          <tr><td>Social handles</td><td>Reserve @stonebranchlakemartin on Instagram, Facebook</td><td>Free</td></tr>
+          <tr><td>Google Business Profile</td><td>Create listing</td><td>Free</td></tr>
+          <tr><td>Brand basics</td><td>Name confirmed, tone guide, color palette</td><td>Free</td></tr>
+          <tr><td>Land photography</td><td>Hire local drone photographer</td><td>$300&ndash;600</td></tr>
+          <tr><td>Monday.com workspace</td><td>Create Stonebranch workspace, construction board</td><td>Existing sub</td></tr>
+          <tr><td>Google Drive structure</td><td>Set up folder structure</td><td>Free</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Phase 1 &mdash; Post-Approval through Opening (Cabins 1&ndash;4)</h3>
+
+    <h4>Pre-construction</h4>
+    <ul>
+      <li>Website Phase 1 MVP (Astro: Home, Property, Coming Soon, Contact)</li>
+      <li>Email address (Cloudflare Email Routing)</li>
+      <li>Monday.com Gantt with OZ deadline marked</li>
+      <li>QuickBooks Simple Start for OZB cost tracking ($30/mo)</li>
+    </ul>
+
+    <h4>Pre-opening</h4>
+    <ul>
+      <li>Hospitable PMS setup ($29&ndash;$79/mo)</li>
+      <li>Smart locks installed + connected to Hospitable for auto-codes</li>
+      <li>Airbnb + VRBO listings created</li>
+      <li>Guest messaging templates configured</li>
+      <li>Cleaning crew contracted + Turno setup</li>
+      <li>House manuals written &amp; printed</li>
+      <li>Local emergency contact identified</li>
+      <li>Website full build (cabin pages, booking widget, group retreats page)</li>
+      <li>Stripe connected for direct bookings</li>
+    </ul>
+
+    <h3>Phase 2 &mdash; Scaling (Cabins 5&ndash;12)</h3>
+    <ul>
+      <li>Migrate to OwnerRez at 5 cabins</li>
+      <li>Direct booking site after 20+ reviews</li>
+      <li>Group retreat packages &amp; inquiry-to-quote flow</li>
+      <li>ResortCleaning at 8+ cabins</li>
+      <li>Dynamic pricing (PriceLabs or Wheelhouse)</li>
+    </ul>
+
+    <h3>Phase 3 &mdash; Full Operation (12+ Cabins, Events)</h3>
+    <ul>
+      <li>Events platform (Honeybook or Dubsado for weddings/retreats)</li>
+      <li>Guest CRM for repeat bookings &amp; corporate retreat clients</li>
+      <li>Professional dynamic pricing via PriceLabs</li>
+      <li>On-site property manager or dedicated co-host</li>
+      <li>Full ops dashboard in Monday.com</li>
+    </ul>
+
+    <h3>OZ Timing Reminders</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Milestone</th><th>OZ Implication</th></tr></thead>
+        <tbody>
+          <tr><td>Mid-March 2026</td><td>Permits approved</td><td>Clock starts &mdash; substantial improvement must begin</td></tr>
+          <tr><td>Late March 2026</td><td>Break ground</td><td>OZB property basis clock begins</td></tr>
+          <tr><td>Mid-October 2026</td><td>Target CO</td><td>Placed-in-service for OZ purposes</td></tr>
+          <tr class="highlight-row"><td><strong>12/31/2026</strong></td><td><strong>Hard deadline</strong></td><td><strong>Capital gains deferral deadline &mdash; property MUST be placed in service</strong></td></tr>
+          <tr><td>2027+</td><td>Future phases</td><td>OZ 2.0 legislation in progress &mdash; confirm with counsel</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p><strong>Key risk:</strong> If permits slip by more than 6 weeks from mid-March, you&rsquo;re looking at December CO, which is uncomfortably close to the deadline. Track weekly.</p>
+      <p style="margin-top: 0.75rem;"><strong>OZ operational requirement:</strong> Under Vulcan OZB, LLC must be the active operating business generating income from the OZ property (&ge;50% gross income from active business in the OZ). Passive rental income could jeopardize OZB status &mdash; work with OZ counsel to ensure the business structure is correctly categorized as &ldquo;active&rdquo; hospitality.</p>
+    </div>
+
+    <h3>Prioritized Quick-Start List</h3>
+
+    <h4>Do this week</h4>
+    <ol>
+      <li>Register stonebranchlakemartin.com</li>
+      <li>Reserve social handles</li>
+      <li>Create Google Business Profile</li>
+      <li>Create Monday.com Stonebranch workspace</li>
+      <li>Create Google Drive folder structure</li>
+    </ol>
+
+    <h4>Do this month</h4>
+    <ol>
+      <li>Hire photographer for land/drone shots</li>
+      <li>Draft brand identity (color palette, tone guide)</li>
+      <li>Set up construction tracking board with OZ deadline</li>
+      <li>QuickBooks Simple Start for OZB cost basis tracking</li>
+    </ol>
+
+    <h4>Do before opening</h4>
+    <ol>
+      <li>Build Astro website (MVP first, full site before launch)</li>
+      <li>Install Hospitable + connect Airbnb + VRBO</li>
+      <li>Install smart locks + connect for auto-codes</li>
+      <li>Set up Turno + local cleaning crew</li>
+      <li>Write guest house manuals</li>
+      <li>Configure all automated messaging flows</li>
+      <li>Line up local property manager / emergency contact</li>
+    </ol>
+
+    <!-- Footer -->
+    <footer class="doc-footer">
+      <p class="doc-footer-text">
+        Research as of February 2026. Platform pricing and features change frequently &mdash; verify before purchasing.
+        OZ/tax guidance should be confirmed with legal/tax counsel before acting.
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>

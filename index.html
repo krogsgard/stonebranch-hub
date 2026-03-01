@@ -13,19 +13,22 @@
     /* ---- Reset & Tokens ---- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Palette derived from Farrow & Ball:
+       Reduced Green #313 (#5d594b), Dibber #312 (#7f775b),
+       Stony Ground #211 (#cec1ad), Marmelo #316 (#a36f4d) */
     :root {
-      --forest:     #1b2a1c;
-      --forest-mid: #243327;
-      --moss:       #3d5440;
-      --sage:       #6b7c5c;
-      --gold:       #b89054;
-      --gold-light: #d4ae78;
-      --cream:      #f2ece0;
-      --parchment:  #e8e0d0;
-      --sand:       #c4b49a;
-      --stone:      #7a7065;
-      --bark:       #3a2e24;
-      --charcoal:   #1e1c1a;
+      --forest:     #2d2b26;
+      --forest-mid: #383530;
+      --moss:       #5d594b;
+      --sage:       #7f775b;
+      --gold:       #a36f4d;
+      --gold-light: #c08e6e;
+      --cream:      #e4dacb;
+      --parchment:  #cec1ad;
+      --sand:       #b0a590;
+      --stone:      #8a8172;
+      --bark:       #3a3630;
+      --charcoal:   #22211e;
 
       --font-serif: 'Cormorant Garamond', Georgia, serif;
       --font-sans:  'Jost', -apple-system, sans-serif;
@@ -276,10 +279,10 @@
       border-radius: 0;
     }
 
-    .badge--live      { background: rgba(107, 124, 92, 0.2); color: #8fb87a; border: 1px solid rgba(107, 124, 92, 0.4); }
-    .badge--pending   { background: rgba(184, 144, 84, 0.15); color: var(--gold); border: 1px solid rgba(184, 144, 84, 0.3); }
-    .badge--needs-setup { background: rgba(180, 100, 60, 0.12); color: #d4886a; border: 1px solid rgba(180, 100, 60, 0.3); }
-    .badge--building  { background: rgba(107, 124, 92, 0.12); color: var(--sage); border: 1px solid rgba(107, 124, 92, 0.25); }
+    .badge--live      { background: rgba(127, 119, 91, 0.2); color: #a09878; border: 1px solid rgba(127, 119, 91, 0.4); }
+    .badge--pending   { background: rgba(163, 111, 77, 0.15); color: var(--gold); border: 1px solid rgba(163, 111, 77, 0.3); }
+    .badge--needs-setup { background: rgba(163, 111, 77, 0.12); color: var(--gold-light); border: 1px solid rgba(163, 111, 77, 0.3); }
+    .badge--building  { background: rgba(127, 119, 91, 0.12); color: var(--sage); border: 1px solid rgba(127, 119, 91, 0.25); }
 
     .status-card__title {
       font-family: var(--font-serif);
@@ -403,7 +406,7 @@
       font-size: 0.65rem;
     }
 
-    .setup-item__check--done   { border-color: #8fb87a; color: #8fb87a; background: rgba(107,124,92,0.15); }
+    .setup-item__check--done   { border-color: #a09878; color: #a09878; background: rgba(127,119,91,0.15); }
     .setup-item__check--todo   { border-color: rgba(242, 236, 224, 0.2); color: transparent; }
     .setup-item__check--urgent { border-color: var(--gold); color: var(--gold); }
 
@@ -525,6 +528,21 @@
     <!-- ============ SUBSITES ============ -->
     <div class="section-label">Subsites &amp; Resources</div>
     <div class="status-grid">
+
+      <div class="status-card">
+        <div class="status-card__header">
+          <span class="status-card__name">Discovery Document</span>
+          <span class="badge badge--live">Complete</span>
+        </div>
+        <div class="status-card__title">Research &amp; Recommendations</div>
+        <div class="status-card__desc">
+          Full discovery: competitive landscape, brand positioning, booking platforms,
+          pricing research, operations playbook, and phased build sequence.
+        </div>
+        <a href="discovery.html" class="status-card__link">
+          Read Discovery
+        </a>
+      </div>
 
       <div class="status-card">
         <div class="status-card__header">
