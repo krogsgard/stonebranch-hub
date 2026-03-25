@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Document Center — Stonebranch Hub</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest:     #2d2b26;
+      --forest-mid: #383530;
+      --moss:       #5d594b;
+      --sage:       #7f775b;
+      --gold:       #a36f4d;
+      --gold-light: #c08e6e;
+      --cream:      #e4dacb;
+      --parchment:  #cec1ad;
+      --sand:       #b0a590;
+      --stone:      #8a8172;
+      --bark:       #3a3630;
+      --charcoal:   #22211e;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Jost', -apple-system, sans-serif;
+    }
+
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      background: var(--charcoal);
+      color: var(--cream);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    /* ---- Header ---- */
+    .hub-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; margin-bottom: 3.5rem; padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(184, 144, 84, 0.2);
+    }
+    .hub-brand { display: flex; flex-direction: column; gap: 0.25rem; }
+    .hub-mark { font-family: var(--font-serif); font-size: 2.25rem; font-weight: 300; color: var(--cream); letter-spacing: 0.02em; }
+    .hub-mark span { color: var(--gold); }
+    .hub-sub { font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); }
+    .hub-nav { display: flex; align-items: center; gap: 1.5rem; }
+    .hub-nav a {
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s; padding: 0.25rem 0;
+    }
+    .hub-nav a:hover { color: var(--cream); }
+    .hub-nav a.active { color: var(--gold); border-bottom: 1px solid var(--gold); }
+
+    /* ---- Section labels ---- */
+    .section-label {
+      font-family: var(--font-sans); font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(184, 144, 84, 0.2); }
+
+    /* ---- Upload Zone ---- */
+    .upload-zone {
+      border: 2px dashed rgba(163, 111, 77, 0.3); background: rgba(45, 43, 38, 0.5);
+      padding: 2.5rem; text-align: center; margin-bottom: 1.5rem;
+      transition: border-color 0.2s, background 0.2s; cursor: pointer;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--gold); background: rgba(163, 111, 77, 0.08);
+    }
+    .upload-zone__icon { font-size: 2rem; margin-bottom: 0.75rem; opacity: 0.5; }
+    .upload-zone__text { font-size: 0.85rem; color: var(--sand); margin-bottom: 0.5rem; }
+    .upload-zone__hint { font-size: 0.7rem; color: var(--stone); }
+    .upload-zone input[type="file"] { display: none; }
+
+    /* ---- Upload Form (shown after file selected) ---- */
+    .upload-form {
+      background: var(--forest); padding: 2rem; margin-bottom: 2.5rem;
+      display: none; animation: fadeIn 0.2s ease;
+    }
+    .upload-form.visible { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .upload-form__file-info {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem; border-bottom: 1px solid rgba(242, 236, 224, 0.08);
+    }
+    .upload-form__file-icon {
+      width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center;
+      background: rgba(163, 111, 77, 0.15); color: var(--gold); font-size: 0.6rem;
+      font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .upload-form__file-name { font-size: 0.9rem; color: var(--cream); }
+    .upload-form__file-size { font-size: 0.75rem; color: var(--stone); }
+    .upload-form__file-remove {
+      margin-left: auto; font-size: 0.7rem; color: var(--stone); cursor: pointer;
+      letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
+    }
+    .upload-form__file-remove:hover { color: #c06050; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-field label {
+      display: block; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 0.375rem;
+    }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; padding: 0.6rem 0.75rem; background: var(--bark); border: 1px solid rgba(242,236,224,0.1);
+      color: var(--cream); font-family: var(--font-sans); font-size: 0.85rem; font-weight: 300;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: rgba(163, 111, 77, 0.5);
+    }
+    .form-field select { cursor: pointer; }
+    .form-field textarea { resize: vertical; min-height: 60px; }
+
+    .upload-actions { display: flex; gap: 1rem; margin-top: 1.25rem; }
+    .btn {
+      padding: 0.6rem 1.5rem; font-family: var(--font-sans); font-size: 0.7rem;
+      font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      border: none; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--gold); color: var(--charcoal); }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: transparent; color: var(--stone); border: 1px solid rgba(242,236,224,0.15); }
+    .btn-secondary:hover { color: var(--cream); border-color: rgba(242,236,224,0.3); }
+
+    /* ---- Progress bar ---- */
+    .upload-progress { display: none; margin-top: 1rem; }
+    .upload-progress.visible { display: block; }
+    .upload-progress__bar { height: 2px; background: rgba(242,236,224,0.1); width: 100%; }
+    .upload-progress__fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s; }
+    .upload-progress__text { font-size: 0.7rem; color: var(--stone); margin-top: 0.375rem; }
+
+    /* ---- Filters ---- */
+    .filters {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 0.35rem 0.85rem; font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      background: transparent; border: 1px solid rgba(242,236,224,0.12); color: var(--stone);
+      transition: all 0.2s;
+    }
+    .filter-chip:hover { border-color: rgba(242,236,224,0.25); color: var(--cream); }
+    .filter-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(163,111,77,0.1); }
+    .filter-search {
+      margin-left: auto; padding: 0.4rem 0.75rem; background: var(--bark);
+      border: 1px solid rgba(242,236,224,0.1); color: var(--cream); font-family: var(--font-sans);
+      font-size: 0.8rem; font-weight: 300; outline: none; min-width: 180px;
+      transition: border-color 0.2s;
+    }
+    .filter-search:focus { border-color: rgba(163,111,77,0.5); }
+    .filter-search::placeholder { color: var(--stone); }
+
+    /* ---- Document Grid ---- */
+    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+
+    .doc-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(242,236,224,0.08);
+      padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;
+      transition: border-color 0.2s;
+    }
+    .doc-card:hover { border-color: rgba(184,144,84,0.3); }
+
+    .doc-card__header { display: flex; align-items: flex-start; gap: 1rem; }
+    .doc-card__icon {
+      width: 2.75rem; height: 2.75rem; display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .doc-card__meta { flex: 1; min-width: 0; }
+    .doc-card__name {
+      font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400;
+      color: var(--cream); line-height: 1.3; word-break: break-word;
+    }
+    .doc-card__type {
+      font-size: 0.6rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--stone); margin-top: 0.125rem;
+    }
+
+    .doc-card__desc { font-size: 0.8rem; color: rgba(242,236,224,0.45); line-height: 1.5; }
+
+    .doc-card__footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: auto; padding-top: 0.75rem;
+      border-top: 1px solid rgba(242,236,224,0.06);
+    }
+    .doc-card__date { font-size: 0.7rem; color: var(--stone); }
+    .doc-card__size { font-size: 0.65rem; color: var(--stone); }
+    .doc-card__actions { display: flex; gap: 0.75rem; }
+    .doc-card__action {
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--gold); cursor: pointer; transition: color 0.2s; background: none; border: none;
+      font-family: var(--font-sans);
+    }
+    .doc-card__action:hover { color: var(--gold-light); }
+    .doc-card__action--delete { color: var(--stone); }
+    .doc-card__action--delete:hover { color: #c06050; }
+
+    /* Type color coding */
+    .type-permit    { background: rgba(107, 142, 135, 0.2); color: #8ab5ac; }
+    .type-guideline { background: rgba(127, 119, 91, 0.2); color: #b5ad8f; }
+    .type-invoice   { background: rgba(163, 111, 77, 0.2); color: var(--gold-light); }
+    .type-drawing   { background: rgba(120, 130, 160, 0.2); color: #a0adc8; }
+    .type-contract  { background: rgba(150, 110, 130, 0.2); color: #c4a0b5; }
+    .type-photo     { background: rgba(130, 145, 110, 0.2); color: #b0c09a; }
+    .type-general   { background: rgba(138, 129, 114, 0.15); color: var(--sand); }
+
+    /* ---- Empty state ---- */
+    .empty-state {
+      text-align: center; padding: 4rem 2rem; color: var(--stone);
+    }
+    .empty-state__icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.3; }
+    .empty-state__text { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .empty-state__hint { font-size: 0.75rem; color: var(--moss); }
+
+    /* ---- Loading ---- */
+    .loading { text-align: center; padding: 3rem; color: var(--stone); font-size: 0.85rem; }
+
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; padding: 0.85rem 1.5rem;
+      background: var(--forest); border: 1px solid rgba(163,111,77,0.3);
+      color: var(--cream); font-size: 0.8rem; z-index: 1000;
+      transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
+    }
+    .toast.visible { transform: translateY(0); opacity: 1; }
+    .toast.error { border-color: rgba(192,96,80,0.4); }
+
+    /* ---- Footer ---- */
+    .hub-footer {
+      padding-top: 3rem; margin-top: 3rem;
+      border-top: 1px solid rgba(242,236,224,0.07); text-align: center;
+    }
+    .hub-footer-text { font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(242,236,224,0.25); }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      .hub-header { flex-direction: column; }
+      .hub-nav { justify-content: flex-start; }
+      .doc-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .filters { flex-direction: column; align-items: stretch; }
+      .filter-search { margin-left: 0; min-width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <header class="hub-header">
+      <div class="hub-brand">
+        <div class="hub-mark">Stonebranch <span>Hub</span></div>
+        <div class="hub-sub">Document Center &ensp;·&ensp; Vulcan OZB, LLC</div>
+      </div>
+      <nav class="hub-nav">
+        <a href="index.html">Dashboard</a>
+        <a href="discovery.html">Discovery</a>
+        <a href="documents.html" class="active">Documents</a>
+      </nav>
+    </header>
+
+    <!-- Upload Section -->
+    <div class="section-label">Upload Document</div>
+
+    <div class="upload-zone" id="dropzone">
+      <div class="upload-zone__icon">&#8593;</div>
+      <div class="upload-zone__text">Drop files here or click to browse</div>
+      <div class="upload-zone__hint">PDF, Word, Excel, images — up to 25 MB</div>
+      <input type="file" id="file-input" accept=".pdf,.docx,.xlsx,.doc,.xls,.txt,.csv,.jpg,.jpeg,.png,.webp,.heic" />
+    </div>
+
+    <div class="upload-form" id="upload-form">
+      <div class="upload-form__file-info" id="file-info"></div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="doc-name">Document Name</label>
+          <input type="text" id="doc-name" placeholder="e.g. Alabama Power Non-Residential Guidelines" />
+        </div>
+        <div class="form-field">
+          <label for="doc-type">Type</label>
+          <select id="doc-type">
+            <option value="permit">Permit</option>
+            <option value="guideline">Guideline</option>
+            <option value="invoice">Invoice</option>
+            <option value="drawing">Drawing / Plan</option>
+            <option value="contract">Contract</option>
+            <option value="photo">Photo</option>
+            <option value="general" selected>General</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="doc-category">Category (optional)</label>
+          <input type="text" id="doc-category" placeholder="e.g. Dock Permit, Cabin A, Site Work" />
+        </div>
+        <div class="form-field">
+          <label for="doc-uploaded-by">Uploaded By</label>
+          <input type="text" id="doc-uploaded-by" value="Brian" />
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-field">
+          <label for="doc-description">Description (optional)</label>
+          <textarea id="doc-description" rows="2" placeholder="Brief notes about this document..."></textarea>
+        </div>
+      </div>
+      <div class="upload-progress" id="upload-progress">
+        <div class="upload-progress__bar"><div class="upload-progress__fill" id="progress-fill"></div></div>
+        <div class="upload-progress__text" id="progress-text">Uploading...</div>
+      </div>
+      <div class="upload-actions">
+        <button class="btn btn-primary" id="upload-btn">Upload Document</button>
+        <button class="btn btn-secondary" id="cancel-btn">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Document List -->
+    <div class="section-label">Documents</div>
+
+    <div class="filters" id="filters">
+      <button class="filter-chip active" data-type="">All</button>
+      <button class="filter-chip" data-type="permit">Permits</button>
+      <button class="filter-chip" data-type="guideline">Guidelines</button>
+      <button class="filter-chip" data-type="invoice">Invoices</button>
+      <button class="filter-chip" data-type="drawing">Drawings</button>
+      <button class="filter-chip" data-type="contract">Contracts</button>
+      <button class="filter-chip" data-type="photo">Photos</button>
+      <button class="filter-chip" data-type="general">General</button>
+      <input type="text" class="filter-search" id="search-input" placeholder="Search documents..." />
+    </div>
+
+    <div id="doc-list">
+      <div class="loading">Loading documents...</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="hub-footer">
+      <p class="hub-footer-text">
+        Stonebranch Hub &ensp;·&ensp; Internal use only &ensp;·&ensp; Vulcan OZB, LLC &ensp;·&ensp;
+        Updated March 2026
+      </p>
+    </footer>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = 'https://stonebranchlakemartin.com/api/documents';
+    let selectedFile = null;
+    let activeFilter = '';
+    let searchTimeout = null;
+    let documents = [];
+
+    // ---- Toast ----
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.toggle('error', isError);
+      t.classList.add('visible');
+      setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+
+    // ---- Format helpers ----
+    function formatSize(bytes) {
+      if (!bytes) return '';
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso + (iso.includes('T') ? '' : 'T00:00:00Z'));
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function getTypeLabel(type) {
+      const labels = {
+        permit: 'Permit', guideline: 'Guideline', invoice: 'Invoice',
+        drawing: 'Drawing', contract: 'Contract', photo: 'Photo', general: 'General',
+      };
+      return labels[type] || type;
+    }
+
+    function getExtFromMime(mime) {
+      const map = {
+        'application/pdf': 'PDF',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'DOCX',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'XLSX',
+        'application/msword': 'DOC',
+        'text/plain': 'TXT',
+        'text/csv': 'CSV',
+        'image/jpeg': 'JPG', 'image/png': 'PNG', 'image/webp': 'WEBP', 'image/heic': 'HEIC',
+      };
+      return map[mime] || 'FILE';
+    }
+
+    // ---- Dropzone ----
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    const uploadForm = document.getElementById('upload-form');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      if (e.dataTransfer.files.length) handleFileSelected(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) handleFileSelected(fileInput.files[0]);
+    });
+
+    function handleFileSelected(file) {
+      selectedFile = file;
+      const ext = file.name.split('.').pop().toUpperCase();
+      const info = document.getElementById('file-info');
+      info.innerHTML = `
+        <div class="upload-form__file-icon">${ext}</div>
+        <div>
+          <div class="upload-form__file-name">${file.name}</div>
+          <div class="upload-form__file-size">${formatSize(file.size)}</div>
+        </div>
+        <span class="upload-form__file-remove" id="remove-file">Remove</span>
+      `;
+      document.getElementById('remove-file').addEventListener('click', cancelUpload);
+
+      // Auto-fill name from filename (strip extension, replace separators)
+      const nameInput = document.getElementById('doc-name');
+      if (!nameInput.value) {
+        nameInput.value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+      }
+
+      uploadForm.classList.add('visible');
+      dropzone.style.display = 'none';
+    }
+
+    function cancelUpload() {
+      selectedFile = null;
+      fileInput.value = '';
+      uploadForm.classList.remove('visible');
+      dropzone.style.display = '';
+      document.getElementById('doc-name').value = '';
+      document.getElementById('doc-description').value = '';
+      document.getElementById('doc-category').value = '';
+      document.getElementById('upload-progress').classList.remove('visible');
+      document.getElementById('upload-btn').disabled = false;
+    }
+
+    document.getElementById('cancel-btn').addEventListener('click', cancelUpload);
+
+    // ---- Upload ----
+    document.getElementById('upload-btn').addEventListener('click', async () => {
+      if (!selectedFile) return;
+      const name = document.getElementById('doc-name').value.trim();
+      if (!name) { showToast('Document name is required', true); return; }
+
+      const btn = document.getElementById('upload-btn');
+      btn.disabled = true;
+      const progress = document.getElementById('upload-progress');
+      const progressFill = document.getElementById('progress-fill');
+      const progressText = document.getElementById('progress-text');
+      progress.classList.add('visible');
+      progressFill.style.width = '30%';
+      progressText.textContent = 'Uploading...';
+
+      const fd = new FormData();
+      fd.append('file', selectedFile);
+      fd.append('name', name);
+      fd.append('doc_type', document.getElementById('doc-type').value);
+      fd.append('category', document.getElementById('doc-category').value.trim());
+      fd.append('description', document.getElementById('doc-description').value.trim());
+      fd.append('uploaded_by', document.getElementById('doc-uploaded-by').value.trim());
+
+      try {
+        progressFill.style.width = '60%';
+        const res = await fetch(API_BASE, { method: 'POST', body: fd });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Done!';
+        showToast('Document uploaded successfully');
+
+        setTimeout(() => {
+          cancelUpload();
+          loadDocuments();
+        }, 500);
+      } catch (err) {
+        showToast(err.message || 'Upload failed', true);
+        btn.disabled = false;
+        progress.classList.remove('visible');
+      }
+    });
+
+    // ---- Filters ----
+    document.getElementById('filters').addEventListener('click', (e) => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip) return;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeFilter = chip.dataset.type;
+      renderDocuments();
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => renderDocuments(), 300);
+    });
+
+    // ---- Load & Render ----
+    async function loadDocuments() {
+      const container = document.getElementById('doc-list');
+      container.innerHTML = '<div class="loading">Loading documents...</div>';
+
+      try {
+        const res = await fetch(API_BASE);
+        const data = await res.json();
+        documents = data.documents || [];
+        renderDocuments();
+      } catch (err) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-state__text">Failed to load documents</div><div class="empty-state__hint">' + err.message + '</div></div>';
+      }
+    }
+
+    function renderDocuments() {
+      const container = document.getElementById('doc-list');
+      const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+
+      let filtered = documents;
+      if (activeFilter) filtered = filtered.filter(d => d.doc_type === activeFilter);
+      if (searchTerm) {
+        filtered = filtered.filter(d =>
+          (d.name || '').toLowerCase().includes(searchTerm) ||
+          (d.description || '').toLowerCase().includes(searchTerm) ||
+          (d.category || '').toLowerCase().includes(searchTerm)
+        );
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state__icon">&#9744;</div>
+            <div class="empty-state__text">${documents.length ? 'No documents match your filter' : 'No documents yet'}</div>
+            <div class="empty-state__hint">${documents.length ? 'Try a different filter or search term' : 'Upload your first document above'}</div>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = '<div class="doc-grid">' + filtered.map(doc => {
+        const ext = getExtFromMime(doc.mime_type);
+        const typeClass = 'type-' + (doc.doc_type || 'general');
+        const catLabel = doc.category ? ` · ${doc.category}` : '';
+        const descHtml = doc.description ? `<div class="doc-card__desc">${escHtml(doc.description)}</div>` : '';
+
+        return `
+          <div class="doc-card" data-id="${doc.id}">
+            <div class="doc-card__header">
+              <div class="doc-card__icon ${typeClass}">${ext}</div>
+              <div class="doc-card__meta">
+                <div class="doc-card__name">${escHtml(doc.name)}</div>
+                <div class="doc-card__type">${getTypeLabel(doc.doc_type)}${catLabel}</div>
+              </div>
+            </div>
+            ${descHtml}
+            <div class="doc-card__footer">
+              <span class="doc-card__date">${formatDate(doc.uploaded_at)}${doc.uploaded_by ? ' · ' + escHtml(doc.uploaded_by) : ''}</span>
+              <span class="doc-card__size">${formatSize(doc.file_size)}</span>
+            </div>
+            <div class="doc-card__actions">
+              <button class="doc-card__action" onclick="downloadDoc('${doc.id}', '${escAttr(doc.name)}')">Download</button>
+              <button class="doc-card__action doc-card__action--delete" onclick="deleteDoc('${doc.id}', '${escAttr(doc.name)}')">Delete</button>
+            </div>
+          </div>`;
+      }).join('') + '</div>';
+    }
+
+    function escHtml(s) { return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function escAttr(s) { return (s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+    // ---- Download ----
+    async function downloadDoc(id, name) {
+      try {
+        const res = await fetch(`${API_BASE}/${id}`);
+        if (!res.ok) throw new Error('Download failed');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name || 'document';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        showToast(err.message || 'Download failed', true);
+      }
+    }
+
+    // ---- Delete ----
+    async function deleteDoc(id, name) {
+      if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+      try {
+        const res = await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Delete failed');
+        showToast('Document deleted');
+        loadDocuments();
+      } catch (err) {
+        showToast(err.message || 'Delete failed', true);
+      }
+    }
+
+    // ---- Init ----
+    loadDocuments();
+  </script>
+</body>
+</html>
