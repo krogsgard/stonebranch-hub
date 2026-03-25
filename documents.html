@@ -333,8 +333,9 @@
     <!-- Document List -->
     <div class="section-label">Documents</div>
 
-    <div class="filters" id="filters">
-      <button class="filter-chip active" data-type="">All</button>
+    <!-- Type filter row -->
+    <div class="filters" id="type-filters">
+      <button class="filter-chip active" data-type="">All Types</button>
       <button class="filter-chip" data-type="permit">Permits</button>
       <button class="filter-chip" data-type="guideline">Guidelines</button>
       <button class="filter-chip" data-type="invoice">Invoices</button>
@@ -344,6 +345,8 @@
       <button class="filter-chip" data-type="general">General</button>
       <input type="text" class="filter-search" id="search-input" placeholder="Search documents..." />
     </div>
+    <!-- Dynamic category filter row (populated from data) -->
+    <div class="filters" id="category-filters" style="margin-top:-0.5rem"></div>
 
     <div id="doc-list">
       <div class="loading">Loading documents...</div>
@@ -364,7 +367,8 @@
   <script>
     const API_BASE = 'https://stonebranchlakemartin.com/api/documents';
     let selectedFile = null;
-    let activeFilter = '';
+    let activeTypeFilter = '';
+    let activeCategoryFilter = '';
     let searchTimeout = null;
     let documents = [];
 
@@ -513,12 +517,21 @@
     });
 
     // ---- Filters ----
-    document.getElementById('filters').addEventListener('click', (e) => {
+    document.getElementById('type-filters').addEventListener('click', (e) => {
       const chip = e.target.closest('.filter-chip');
       if (!chip) return;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#type-filters .filter-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilter = chip.dataset.type;
+      activeTypeFilter = chip.dataset.type;
+      renderDocuments();
+    });
+
+    document.getElementById('category-filters').addEventListener('click', (e) => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip) return;
+      document.querySelectorAll('#category-filters .filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCategoryFilter = chip.dataset.category;
       renderDocuments();
     });
 
@@ -526,6 +539,16 @@
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => renderDocuments(), 300);
     });
+
+    function buildCategoryChips() {
+      const cats = new Set();
+      for (const d of documents) if (d.category) cats.add(d.category);
+      const container = document.getElementById('category-filters');
+      if (!cats.size) { container.innerHTML = ''; return; }
+      const sorted = [...cats].sort();
+      container.innerHTML = '<button class="filter-chip active" data-category="">All Categories</button>' +
+        sorted.map(c => `<button class="filter-chip" data-category="${escAttr(c)}">${escHtml(c)}</button>`).join('');
+    }
 
     // ---- Load & Render ----
     async function loadDocuments() {
@@ -536,6 +559,7 @@
         const res = await fetch(API_BASE);
         const data = await res.json();
         documents = data.documents || [];
+        buildCategoryChips();
         renderDocuments();
       } catch (err) {
         container.innerHTML = '<div class="empty-state"><div class="empty-state__text">Failed to load documents</div><div class="empty-state__hint">' + err.message + '</div></div>';
@@ -547,7 +571,8 @@
       const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
 
       let filtered = documents;
-      if (activeFilter) filtered = filtered.filter(d => d.doc_type === activeFilter);
+      if (activeTypeFilter) filtered = filtered.filter(d => d.doc_type === activeTypeFilter);
+      if (activeCategoryFilter) filtered = filtered.filter(d => d.category === activeCategoryFilter);
       if (searchTerm) {
         filtered = filtered.filter(d =>
           (d.name || '').toLowerCase().includes(searchTerm) ||
