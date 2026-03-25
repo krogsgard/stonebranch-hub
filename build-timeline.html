@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Build Timeline — Stonebranch Hub</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --forest: #2d2b26; --forest-mid: #383530; --moss: #5d594b; --sage: #7f775b;
+      --gold: #a36f4d; --gold-light: #c08e6e; --cream: #e4dacb; --parchment: #cec1ad;
+      --sand: #b0a590; --stone: #8a8172; --bark: #3a3630; --charcoal: #22211e;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Jost', -apple-system, sans-serif;
+    }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-weight: 300; background: var(--charcoal); color: var(--cream); line-height: 1.7; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    /* Header */
+    .hub-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,144,84,0.2); }
+    .hub-brand { display: flex; flex-direction: column; gap: 0.25rem; }
+    .hub-mark { font-family: var(--font-serif); font-size: 2.25rem; font-weight: 300; color: var(--cream); letter-spacing: 0.02em; }
+    .hub-mark span { color: var(--gold); }
+    .hub-sub { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); }
+    .hub-nav { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .hub-nav a { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); transition: color 0.2s; padding: 0.25rem 0; }
+    .hub-nav a:hover { color: var(--cream); }
+    .hub-nav a.active { color: var(--gold); border-bottom: 1px solid var(--gold); }
+
+    /* Section labels */
+    .section-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(184,144,84,0.2); }
+
+    /* Summary card */
+    .summary { background: var(--forest); padding: 2rem 2.5rem; margin-bottom: 2.5rem; }
+    .summary-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300; margin-bottom: 0.75rem; }
+    .summary-body { font-size: 0.85rem; color: rgba(242,236,224,0.6); line-height: 1.75; }
+    .summary-body strong { color: var(--cream); font-weight: 400; }
+    .summary-stats { display: flex; gap: 2rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(242,236,224,0.08); flex-wrap: wrap; }
+    .summary-stat { }
+    .summary-stat__num { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 300; color: var(--cream); line-height: 1; }
+    .summary-stat__lbl { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
+
+    /* Contract highlights */
+    .highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+    .highlight-card { background: var(--forest); padding: 1.25rem 1.5rem; border-left: 2px solid var(--gold); }
+    .highlight-card__label { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); margin-bottom: 0.25rem; }
+    .highlight-card__value { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 300; color: var(--cream); }
+    .highlight-card__sub { font-size: 0.7rem; color: rgba(242,236,224,0.4); margin-top: 0.15rem; }
+
+    /* Gantt chart */
+    .gantt-wrapper { overflow-x: auto; margin-bottom: 3rem; }
+    .gantt { width: 100%; min-width: 800px; border-collapse: collapse; }
+    .gantt th { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); padding: 0.75rem 0.5rem; border-bottom: 1px solid rgba(184,144,84,0.2); text-align: center; }
+    .gantt th:first-child { text-align: left; width: 220px; min-width: 180px; }
+    .gantt th:nth-child(2) { text-align: right; width: 65px; min-width: 55px; }
+    .gantt th.month-col { width: calc((100% - 285px) / 7); }
+    .gantt td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(242,236,224,0.04); vertical-align: middle; }
+    .gantt td:first-child { font-size: 0.8rem; color: var(--cream); white-space: nowrap; }
+    .gantt td:nth-child(2) { font-size: 0.75rem; color: var(--sand); text-align: right; font-variant-numeric: tabular-nums; }
+    .gantt .month-cell { position: relative; padding: 0.35rem 2px; }
+    .gantt-bar { height: 18px; border-radius: 2px; min-width: 4px; }
+    .gantt-bar.full { width: 100%; }
+    .gantt-bar.half-left { width: 50%; }
+    .gantt-bar.half-right { width: 50%; margin-left: 50%; }
+    .gantt-bar.third-right { width: 33%; margin-left: 67%; }
+    .gantt-bar.two-third { width: 67%; }
+    .gantt-bar.quarter-right { width: 25%; margin-left: 75%; }
+
+    /* Phase colors */
+    .phase-sitework { background: #6b8a73; }
+    .phase-structure { background: #a36f4d; }
+    .phase-exterior { background: #7f9bb0; }
+    .phase-rough { background: #9b7fb0; }
+    .phase-interior { background: #b09b7f; }
+    .phase-finishes { background: #7fb0a0; }
+    .phase-final { background: #c08e6e; }
+
+    /* Phase group headers */
+    .gantt .phase-header td { padding-top: 1rem; border-bottom: none; }
+    .phase-tag { display: inline-block; font-size: 0.55rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 2px; }
+    .phase-tag.sitework { background: rgba(107,138,115,0.25); color: #6b8a73; }
+    .phase-tag.structure { background: rgba(163,111,77,0.25); color: var(--gold-light); }
+    .phase-tag.exterior { background: rgba(127,155,176,0.25); color: #7f9bb0; }
+    .phase-tag.rough { background: rgba(155,127,176,0.25); color: #c0a7d6; }
+    .phase-tag.interior { background: rgba(176,155,127,0.25); color: #c8b89a; }
+    .phase-tag.finishes { background: rgba(127,176,160,0.25); color: #7fb0a0; }
+    .phase-tag.final { background: rgba(192,142,110,0.25); color: var(--gold-light); }
+
+    /* Draw schedule table */
+    .draw-table { width: 100%; border-collapse: collapse; margin-bottom: 3rem; }
+    .draw-table th { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); padding: 0.75rem 0.75rem; border-bottom: 1px solid rgba(184,144,84,0.2); text-align: left; }
+    .draw-table th:nth-child(2), .draw-table th:nth-child(3), .draw-table th:nth-child(4) { text-align: right; }
+    .draw-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(242,236,224,0.04); font-size: 0.8rem; }
+    .draw-table td:nth-child(2), .draw-table td:nth-child(3), .draw-table td:nth-child(4) { text-align: right; font-variant-numeric: tabular-nums; }
+    .draw-table .subtotal td { border-top: 1px solid rgba(184,144,84,0.15); font-weight: 500; color: var(--gold-light); }
+    .draw-table .total td { border-top: 2px solid var(--gold); font-weight: 500; color: var(--cream); font-size: 0.85rem; }
+    .draw-table .cumulative { color: var(--sand); font-size: 0.7rem; }
+
+    /* Progress bar */
+    .progress-section { margin-bottom: 3rem; }
+    .progress-track { height: 8px; background: var(--forest); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; transition: width 0.5s; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--stone); }
+
+    /* Milestone markers */
+    .milestone { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--sand); margin-right: 1.5rem; }
+    .milestone-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .milestone-dot.permit { background: #6b8a73; }
+    .milestone-dot.dryout { background: #7f9bb0; }
+    .milestone-dot.co { background: var(--gold-light); }
+
+    /* Footer */
+    .source-note { font-size: 0.65rem; color: var(--stone); text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(184,144,84,0.1); }
+
+    @media (max-width: 600px) {
+      .page { padding: 2rem 1rem 4rem; }
+      .hub-header { flex-direction: column; }
+      .highlights { grid-template-columns: 1fr 1fr; }
+      .gantt th:first-child { width: 140px; min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <header class="hub-header">
+    <div class="hub-brand">
+      <div class="hub-mark">Stone<span>branch</span></div>
+      <div class="hub-sub">Project Hub &mdash; Build Timeline</div>
+    </div>
+    <nav class="hub-nav">
+      <a href="index.html">Dashboard</a>
+      <a href="documents.html">Documents</a>
+      <a href="dock-permit.html">Dock Permit</a>
+      <a href="build-timeline.html" class="active">Build</a>
+      <a href="discovery.html">Discovery</a>
+    </nav>
+  </header>
+
+  <!-- Summary -->
+  <div class="section-label">Contract Overview</div>
+  <div class="summary">
+    <div class="summary-title">Willow Homes &mdash; Fixed Price Construction</div>
+    <div class="summary-body">
+      <strong>Four cabins</strong> &mdash; 2&times; 2BR/2BA ($410K ea) + 2&times; 3BR/3BA ($470K ea).
+      Signed <strong>March 24, 2026</strong> with Jason Hale, Willow Homes LLC (AL License #23729).
+      Contract time: <strong>7 months from permit</strong> or 6 months from footing pour.
+      Early/late incentive: <strong>$5,000/cabin per 28-day period</strong>.
+    </div>
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <div class="summary-stat__num">$1.76M</div>
+        <div class="summary-stat__lbl">Total Contract</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat__num">4</div>
+        <div class="summary-stat__lbl">Cabins</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat__num">7 mo</div>
+        <div class="summary-stat__lbl">Contract Time</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat__num">$60K</div>
+        <div class="summary-stat__lbl">Deposit</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key dates -->
+  <div class="highlights">
+    <div class="highlight-card">
+      <div class="highlight-card__label">Contract Signed</div>
+      <div class="highlight-card__value">Mar 24</div>
+      <div class="highlight-card__sub">Effective date</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Permit Application</div>
+      <div class="highlight-card__value">~Apr 3</div>
+      <div class="highlight-card__sub">Within 10 days of funding</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Est. Permit Issued</div>
+      <div class="highlight-card__value">~May 1</div>
+      <div class="highlight-card__sub">Start of 7-month clock</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Target CO</div>
+      <div class="highlight-card__value">~Nov 30</div>
+      <div class="highlight-card__sub">7 months from permit</div>
+    </div>
+  </div>
+
+  <!-- Milestones legend -->
+  <div style="margin-bottom: 2rem;">
+    <span class="milestone"><span class="milestone-dot permit"></span> Permit / Site Work</span>
+    <span class="milestone"><span class="milestone-dot dryout"></span> Dry-Out (weather-tight)</span>
+    <span class="milestone"><span class="milestone-dot co"></span> Certificate of Occupancy</span>
+  </div>
+
+  <!-- Gantt Chart -->
+  <div class="section-label">Construction Gantt &mdash; 7 Month Timeline</div>
+  <div class="gantt-wrapper">
+    <table class="gantt">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Draw %</th>
+          <th class="month-col">Mo 1<br><span style="font-size:0.5rem;opacity:0.6">May</span></th>
+          <th class="month-col">Mo 2<br><span style="font-size:0.5rem;opacity:0.6">Jun</span></th>
+          <th class="month-col">Mo 3<br><span style="font-size:0.5rem;opacity:0.6">Jul</span></th>
+          <th class="month-col">Mo 4<br><span style="font-size:0.5rem;opacity:0.6">Aug</span></th>
+          <th class="month-col">Mo 5<br><span style="font-size:0.5rem;opacity:0.6">Sep</span></th>
+          <th class="month-col">Mo 6<br><span style="font-size:0.5rem;opacity:0.6">Oct</span></th>
+          <th class="month-col">Mo 7<br><span style="font-size:0.5rem;opacity:0.6">Nov</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- SITEWORK & FOUNDATION -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag sitework">Site &amp; Foundation</span></td></tr>
+        <tr>
+          <td>Permit</td><td>4%</td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-sitework"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Footings</td><td>6%</td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-sitework"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Foundation Walls</td><td>4%</td>
+          <td class="month-cell"><div class="gantt-bar quarter-right phase-sitework"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-sitework"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+
+        <!-- FRAMING -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag structure">Framing</span></td></tr>
+        <tr>
+          <td>Floor Framing</td><td>5%</td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Wall Framing</td><td>8%</td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-structure"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Roof Framing</td><td>6%</td>
+          <td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+
+        <!-- EXTERIOR / DRY-OUT -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag exterior">Exterior &amp; Dry-Out</span></td></tr>
+        <tr>
+          <td>Doors &amp; Windows</td><td>5%</td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Roof Shingles</td><td>2%</td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Siding &amp; Trim</td><td>6%</td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar full phase-exterior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Exterior Veneer</td><td>0.5%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-exterior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Decks &amp; Porches</td><td>7%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-exterior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+
+        <!-- ROUGH MEP -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag rough">Rough MEP</span></td></tr>
+        <tr>
+          <td>Plumbing Rough</td><td>3%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>HVAC Rough</td><td>2%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Electrical Rough</td><td>3%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Insulation</td><td>1%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-rough"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+
+        <!-- INTERIOR BUILDOUT -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag interior">Interior Buildout</span></td></tr>
+        <tr>
+          <td>Drywall</td><td>4%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar full phase-interior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Interior Doors &amp; Trim</td><td>4%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-interior"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
+          <td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Paint Prime</td><td>2%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-interior"></div></td>
+          <td class="month-cell"></td><td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Tile</td><td>4%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
+          <td class="month-cell"></td>
+        </tr>
+        <tr>
+          <td>Hardwood Flooring</td><td>4%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
+          <td class="month-cell"></td>
+        </tr>
+
+        <!-- FINISHES -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag finishes">Finishes &amp; Fixtures</span></td></tr>
+        <tr>
+          <td>Cabinets &amp; Vanities</td><td>6%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
+        </tr>
+        <tr>
+          <td>Countertops</td><td>3%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
+        </tr>
+        <tr>
+          <td>Electrical Setout</td><td>3%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
+        </tr>
+        <tr>
+          <td>Plumbing Setout</td><td>3%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
+        </tr>
+        <tr>
+          <td>HVAC Setout</td><td>1%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
+        </tr>
+
+        <!-- FINAL -->
+        <tr class="phase-header"><td colspan="9"><span class="phase-tag final">Final &amp; Punch</span></td></tr>
+        <tr>
+          <td>Hardware</td><td>0.5%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
+        </tr>
+        <tr>
+          <td>Shower Doors / Mirrors</td><td>0.5%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
+        </tr>
+        <tr>
+          <td>Shelving</td><td>0.5%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
+        </tr>
+        <tr>
+          <td>Final Paint</td><td>2%</td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar full phase-final"></div></td>
+        </tr>
+        <tr>
+          <td style="color:var(--gold-light)">Punch List / CO</td><td></td>
+          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
+          <td class="month-cell"><div class="gantt-bar half-right phase-final" style="opacity:0.6;border:1px dashed var(--gold-light);background:transparent;"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Draw Schedule -->
+  <div class="section-label">Draw Schedule &mdash; Per Cabin</div>
+  <div style="overflow-x:auto; margin-bottom: 3rem;">
+    <table class="draw-table">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>%</th>
+          <th>2BR ($410K)</th>
+          <th>3BR ($470K)</th>
+        </tr>
+      </thead>
+      <tbody id="draw-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Cumulative spend chart -->
+  <div class="section-label">Cumulative Spend &mdash; All 4 Cabins</div>
+  <div id="spend-chart" style="margin-bottom: 3rem;"></div>
+
+  <!-- Key contract terms -->
+  <div class="section-label">Key Contract Terms</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 3rem;">
+    <div class="highlight-card">
+      <div class="highlight-card__label">Deposit</div>
+      <div class="highlight-card__value">$60,000</div>
+      <div class="highlight-card__sub">Within 3 days of funding close, credited to final payment</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Payment Terms</div>
+      <div class="highlight-card__value">Net 5 Days</div>
+      <div class="highlight-card__sub">6% annual interest + 2% late charge after due</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Early Bonus</div>
+      <div class="highlight-card__value">$5,000</div>
+      <div class="highlight-card__sub">Per cabin, per 28-day period ahead of schedule</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Late Penalty</div>
+      <div class="highlight-card__value">($5,000)</div>
+      <div class="highlight-card__sub">Per cabin, per 28-day period behind schedule</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Warranty</div>
+      <div class="highlight-card__value">1 Year</div>
+      <div class="highlight-card__sub">Limited — latent defects only, excludes landscaping/driveways</div>
+    </div>
+    <div class="highlight-card">
+      <div class="highlight-card__label">Change Orders</div>
+      <div class="highlight-card__value">Written Only</div>
+      <div class="highlight-card__sub">Govt-required changes: cost + 25% overhead</div>
+    </div>
+  </div>
+
+  <!-- Allowance comparison -->
+  <div class="section-label">Allowance Comparison</div>
+  <div style="overflow-x:auto; margin-bottom: 3rem;">
+    <table class="draw-table">
+      <thead>
+        <tr><th>Item</th><th>2BR Cabin</th><th>3BR Cabin</th><th>Delta</th></tr>
+      </thead>
+      <tbody id="allowance-body"></tbody>
+    </table>
+  </div>
+
+  <div class="source-note">
+    Source: Willow Homes Fixed Price Construction Agreement, signed March 24, 2026.<br>
+    Timeline assumes permit issued ~May 1, 2026. Dates are estimates &mdash; actual schedule per contractor draws.
+  </div>
+
+</div>
+
+<script>
+// Draw schedule data
+const draws = [
+  ['Permit', 4],
+  ['Footings', 6],
+  ['Foundation Walls', 4],
+  ['Floor Framing', 5],
+  ['Wall Framing', 8],
+  ['Roof Framing', 6],
+  ['Exterior Doors & Windows', 5],
+  ['Roof Shingles', 2],
+  ['Exterior Siding & Trim', 6],
+  ['Exterior Veneer', 0.5],
+  ['Decks & Porches', 7],
+  ['Plumbing Rough', 3],
+  ['HVAC Rough', 2],
+  ['Electrical Rough', 3],
+  ['Insulation', 1],
+  ['Drywall', 4],
+  ['Interior Doors & Trim', 4],
+  ['Paint Prime', 2],
+  ['Tile', 4],
+  ['Hardwood Flooring', 4],
+  ['Cabinets & Vanities', 6],
+  ['Countertops', 3],
+  ['Electrical Setout', 3],
+  ['Plumbing Setout', 3],
+  ['HVAC Setout', 1],
+  ['Interior Hardware', 0.5],
+  ['Shower Doors / Mirrors', 0.5],
+  ['Shelving', 0.5],
+  ['Final Paint', 2],
+];
+
+const price2 = 410000;
+const price3 = 470000;
+const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+let cum2 = 0, cum3 = 0;
+const tbody = document.getElementById('draw-body');
+draws.forEach(([name, pct]) => {
+  const a2 = Math.round(price2 * pct / 100);
+  const a3 = Math.round(price3 * pct / 100);
+  cum2 += a2;
+  cum3 += a3;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${name}</td><td>${pct}%</td><td>${fmt(a2)}</td><td>${fmt(a3)}</td>`;
+  tbody.appendChild(tr);
+});
+// Total row
+const totalTr = document.createElement('tr');
+totalTr.className = 'total';
+totalTr.innerHTML = `<td>Total</td><td>100%</td><td>${fmt(price2)}</td><td>${fmt(price3)}</td>`;
+tbody.appendChild(totalTr);
+
+// Cumulative spend visualization
+const totalAll = (price2 * 2) + (price3 * 2); // $1,760,000
+const phases = [
+  { label: 'Site & Foundation', pct: 14, month: 'May-Jun', color: '#6b8a73' },
+  { label: 'Framing', pct: 19, month: 'Jun-Jul', color: '#a36f4d' },
+  { label: 'Exterior & Dry-Out', pct: 20.5, month: 'Jul-Sep', color: '#7f9bb0' },
+  { label: 'Rough MEP', pct: 9, month: 'Aug', color: '#9b7fb0' },
+  { label: 'Interior Buildout', pct: 14, month: 'Sep-Oct', color: '#b09b7f' },
+  { label: 'Finishes & Fixtures', pct: 16, month: 'Oct-Nov', color: '#7fb0a0' },
+  { label: 'Final & Punch', pct: 3.5, month: 'Nov', color: '#c08e6e' },
+];
+
+let cumPct = 0;
+const chart = document.getElementById('spend-chart');
+phases.forEach(p => {
+  cumPct += p.pct;
+  const cumDollars = Math.round(totalAll * cumPct / 100);
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;';
+  row.innerHTML = `
+    <div style="width:150px;font-size:0.75rem;color:var(--sand);text-align:right;flex-shrink:0;">${p.label}</div>
+    <div style="flex:1;height:20px;background:var(--forest);border-radius:2px;overflow:hidden;position:relative;">
+      <div style="width:${cumPct}%;height:100%;background:${p.color};border-radius:2px;transition:width 0.5s;"></div>
+    </div>
+    <div style="width:120px;font-size:0.7rem;color:var(--parchment);font-variant-numeric:tabular-nums;flex-shrink:0;">${fmt(cumDollars)} <span style="color:var(--stone);">(${cumPct.toFixed(1)}%)</span></div>
+  `;
+  chart.appendChild(row);
+});
+
+// Allowance comparison
+const allowances = [
+  ['Door Hardware', 707.30, 830.50],
+  ['Exterior Doors', 3900, 3900],
+  ['Windows', 29920, 32340],
+  ['Tile Material', 4202.90, 4202.90],
+  ['Tile Labor', 7300, 7300],
+  ['Hardwood Floors', 10620, 13070],
+  ['Cabinets / Vanities', 15600, 18000],
+  ['Cabinet Knobs & Pulls', 330, 330],
+  ['Countertops', 4510, 5250],
+  ['Shower Doors', 1500, 1500],
+  ['Lighting Fixtures', 3377, 4257],
+  ['Appliances', 7000, 7000],
+  ['Plumbing Fixtures & Bath Hardware', 7568, 9454],
+  ['Porch Material', 22792, 22792],
+  ['Mirrors', 250, 300],
+  ['Shelving', 1040, 1200],
+  ['Foundation', 26348.76, 26348.76],
+  ['Siding Materials', 11320, 12850],
+];
+
+const fmtD = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const aTbody = document.getElementById('allowance-body');
+let tot2 = 0, tot3 = 0;
+allowances.forEach(([name, a2, a3]) => {
+  tot2 += a2; tot3 += a3;
+  const delta = a3 - a2;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${name}</td><td>${fmtD(a2)}</td><td>${fmtD(a3)}</td><td style="color:${delta > 0 ? 'var(--gold-light)' : delta < 0 ? '#7fb0a0' : 'var(--stone)'}">${delta > 0 ? '+' : ''}${fmtD(delta)}</td>`;
+  aTbody.appendChild(tr);
+});
+const totTr = document.createElement('tr');
+totTr.className = 'total';
+totTr.innerHTML = `<td>Total Allowances</td><td>${fmtD(tot2)}</td><td>${fmtD(tot3)}</td><td style="color:var(--gold-light)">+${fmtD(tot3-tot2)}</td>`;
+aTbody.appendChild(totTr);
+</script>
+</body>
+</html>
