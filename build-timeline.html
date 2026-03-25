@@ -43,7 +43,6 @@
     .summary-body { font-size: 0.85rem; color: rgba(242,236,224,0.6); line-height: 1.75; }
     .summary-body strong { color: var(--cream); font-weight: 400; }
     .summary-stats { display: flex; gap: 2rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(242,236,224,0.08); flex-wrap: wrap; }
-    .summary-stat { }
     .summary-stat__num { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 300; color: var(--cream); line-height: 1; }
     .summary-stat__lbl { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
 
@@ -54,36 +53,41 @@
     .highlight-card__value { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 300; color: var(--cream); }
     .highlight-card__sub { font-size: 0.7rem; color: rgba(242,236,224,0.4); margin-top: 0.15rem; }
 
-    /* Gantt chart */
-    .gantt-wrapper { overflow-x: auto; margin-bottom: 3rem; }
-    .gantt { width: 100%; min-width: 800px; border-collapse: collapse; }
-    .gantt th { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); padding: 0.75rem 0.5rem; border-bottom: 1px solid rgba(184,144,84,0.2); text-align: center; }
-    .gantt th:first-child { text-align: left; width: 220px; min-width: 180px; }
-    .gantt th:nth-child(2) { text-align: right; width: 65px; min-width: 55px; }
-    .gantt th.month-col { width: calc((100% - 285px) / 7); }
-    .gantt td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(242,236,224,0.04); vertical-align: middle; }
-    .gantt td:first-child { font-size: 0.8rem; color: var(--cream); white-space: nowrap; }
-    .gantt td:nth-child(2) { font-size: 0.75rem; color: var(--sand); text-align: right; font-variant-numeric: tabular-nums; }
-    .gantt .month-cell { position: relative; padding: 0.35rem 2px; }
-    .gantt-bar { height: 18px; border-radius: 2px; min-width: 4px; }
-    .gantt-bar.full { width: 100%; }
-    .gantt-bar.half-left { width: 50%; }
-    .gantt-bar.half-right { width: 50%; margin-left: 50%; }
-    .gantt-bar.third-right { width: 33%; margin-left: 67%; }
-    .gantt-bar.two-third { width: 67%; }
-    .gantt-bar.quarter-right { width: 25%; margin-left: 75%; }
+    /* Overall progress */
+    .overall-progress { margin-bottom: 2.5rem; }
+    .progress-track { height: 10px; background: var(--forest); border-radius: 5px; overflow: hidden; margin-bottom: 0.5rem; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 5px; transition: width 0.5s; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--stone); }
 
-    /* Phase colors */
-    .phase-sitework { background: #6b8a73; }
-    .phase-structure { background: #a36f4d; }
-    .phase-exterior { background: #7f9bb0; }
-    .phase-rough { background: #9b7fb0; }
-    .phase-interior { background: #b09b7f; }
-    .phase-finishes { background: #7fb0a0; }
-    .phase-final { background: #c08e6e; }
+    /* Gantt chart — data-driven */
+    .gantt-wrapper { overflow-x: auto; margin-bottom: 3rem; }
+    .gantt { width: 100%; min-width: 820px; border-collapse: collapse; }
+    .gantt th { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); padding: 0.75rem 0.5rem; border-bottom: 1px solid rgba(184,144,84,0.2); text-align: center; }
+    .gantt th:first-child { text-align: left; width: 200px; min-width: 160px; }
+    .gantt th:nth-child(2) { text-align: right; width: 50px; }
+    .gantt th:nth-child(3) { text-align: center; width: 70px; }
+    .gantt th.month-col { }
+    .gantt td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(242,236,224,0.04); vertical-align: middle; }
+
+    /* Task rows */
+    .task-row { cursor: pointer; transition: background 0.15s; }
+    .task-row:hover { background: rgba(184,144,84,0.06); }
+    .task-row.selected { background: rgba(184,144,84,0.1); }
+    .task-name { font-size: 0.8rem; color: var(--cream); white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; }
+    .task-pct { font-size: 0.75rem; color: var(--sand); text-align: right; font-variant-numeric: tabular-nums; }
+    .task-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .task-status-dot.pending { background: var(--moss); }
+    .task-status-dot.in-progress { background: #d4a843; }
+    .task-status-dot.complete { background: #6b8a73; }
+    .task-dates { font-size: 0.65rem; color: var(--stone); text-align: center; white-space: nowrap; }
+    .month-cell { position: relative; padding: 0.35rem 2px; }
+    .gantt-bar { height: 16px; border-radius: 2px; position: absolute; top: 50%; transform: translateY(-50%); min-width: 3px; }
+    .gantt-bar.complete { opacity: 1; }
+    .gantt-bar.in-progress { opacity: 0.85; }
+    .gantt-bar.pending { opacity: 0.35; }
 
     /* Phase group headers */
-    .gantt .phase-header td { padding-top: 1rem; border-bottom: none; }
+    .gantt .phase-header td { padding-top: 1rem; padding-bottom: 0.25rem; border-bottom: none; }
     .phase-tag { display: inline-block; font-size: 0.55rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 2px; }
     .phase-tag.sitework { background: rgba(107,138,115,0.25); color: #6b8a73; }
     .phase-tag.structure { background: rgba(163,111,77,0.25); color: var(--gold-light); }
@@ -93,44 +97,61 @@
     .phase-tag.finishes { background: rgba(127,176,160,0.25); color: #7fb0a0; }
     .phase-tag.final { background: rgba(192,142,110,0.25); color: var(--gold-light); }
 
+    /* Phase bar colors */
+    .bar-sitework { background: #6b8a73; }
+    .bar-structure { background: #a36f4d; }
+    .bar-exterior { background: #7f9bb0; }
+    .bar-rough { background: #9b7fb0; }
+    .bar-interior { background: #b09b7f; }
+    .bar-finishes { background: #7fb0a0; }
+    .bar-final { background: #c08e6e; }
+
+    /* Detail panel */
+    .detail-panel { background: var(--forest); border: 1px solid rgba(184,144,84,0.2); padding: 1.5rem 2rem; margin-bottom: 2rem; display: none; }
+    .detail-panel.visible { display: block; }
+    .detail-title { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 300; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+    .detail-close { cursor: pointer; font-size: 1.25rem; color: var(--stone); padding: 0.25rem; }
+    .detail-close:hover { color: var(--cream); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    .detail-field label { display: block; font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); margin-bottom: 0.3rem; }
+    .detail-field input, .detail-field select, .detail-field textarea {
+      width: 100%; background: var(--bark); border: 1px solid rgba(184,144,84,0.15); color: var(--cream);
+      font-family: var(--font-sans); font-size: 0.8rem; padding: 0.5rem 0.6rem; border-radius: 3px; outline: none;
+    }
+    .detail-field input:focus, .detail-field select:focus, .detail-field textarea:focus { border-color: var(--gold); }
+    .detail-field select { appearance: none; cursor: pointer; }
+    .detail-field textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+    .detail-field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); }
+    .detail-draw { font-size: 0.8rem; color: var(--sand); margin-bottom: 1rem; }
+    .detail-draw strong { color: var(--cream); font-weight: 400; }
+    .detail-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .btn-save { background: var(--gold); color: #fff; border: none; padding: 0.5rem 1.25rem; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 3px; }
+    .btn-save:hover { background: var(--gold-light); }
+    .save-msg { font-size: 0.7rem; color: #6b8a73; opacity: 0; transition: opacity 0.3s; }
+    .save-msg.show { opacity: 1; }
+
     /* Draw schedule table */
     .draw-table { width: 100%; border-collapse: collapse; margin-bottom: 3rem; }
     .draw-table th { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); padding: 0.75rem 0.75rem; border-bottom: 1px solid rgba(184,144,84,0.2); text-align: left; }
     .draw-table th:nth-child(2), .draw-table th:nth-child(3), .draw-table th:nth-child(4) { text-align: right; }
     .draw-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(242,236,224,0.04); font-size: 0.8rem; }
     .draw-table td:nth-child(2), .draw-table td:nth-child(3), .draw-table td:nth-child(4) { text-align: right; font-variant-numeric: tabular-nums; }
-    .draw-table .subtotal td { border-top: 1px solid rgba(184,144,84,0.15); font-weight: 500; color: var(--gold-light); }
     .draw-table .total td { border-top: 2px solid var(--gold); font-weight: 500; color: var(--cream); font-size: 0.85rem; }
-    .draw-table .cumulative { color: var(--sand); font-size: 0.7rem; }
-
-    /* Progress bar */
-    .progress-section { margin-bottom: 3rem; }
-    .progress-track { height: 8px; background: var(--forest); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; transition: width 0.5s; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--stone); }
-
-    /* Milestone markers */
-    .milestone { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--sand); margin-right: 1.5rem; }
-    .milestone-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .milestone-dot.permit { background: #6b8a73; }
-    .milestone-dot.dryout { background: #7f9bb0; }
-    .milestone-dot.co { background: var(--gold-light); }
 
     /* Footer */
     .source-note { font-size: 0.65rem; color: var(--stone); text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(184,144,84,0.1); }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .page { padding: 2rem 1rem 4rem; }
       .hub-header { flex-direction: column; }
       .highlights { grid-template-columns: 1fr 1fr; }
-      .gantt th:first-child { width: 140px; min-width: 120px; }
+      .detail-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- Header -->
   <header class="hub-header">
     <div class="hub-brand">
       <div class="hub-mark">Stone<span>branch</span></div>
@@ -156,27 +177,15 @@
       Early/late incentive: <strong>$5,000/cabin per 28-day period</strong>.
     </div>
     <div class="summary-stats">
-      <div class="summary-stat">
-        <div class="summary-stat__num">$1.76M</div>
-        <div class="summary-stat__lbl">Total Contract</div>
-      </div>
-      <div class="summary-stat">
-        <div class="summary-stat__num">4</div>
-        <div class="summary-stat__lbl">Cabins</div>
-      </div>
-      <div class="summary-stat">
-        <div class="summary-stat__num">7 mo</div>
-        <div class="summary-stat__lbl">Contract Time</div>
-      </div>
-      <div class="summary-stat">
-        <div class="summary-stat__num">$60K</div>
-        <div class="summary-stat__lbl">Deposit</div>
-      </div>
+      <div class="summary-stat"><div class="summary-stat__num">$1.76M</div><div class="summary-stat__lbl">Total Contract</div></div>
+      <div class="summary-stat"><div class="summary-stat__num">4</div><div class="summary-stat__lbl">Cabins</div></div>
+      <div class="summary-stat"><div class="summary-stat__num">7 mo</div><div class="summary-stat__lbl">Contract Time</div></div>
+      <div class="summary-stat"><div class="summary-stat__num">$60K</div><div class="summary-stat__lbl">Deposit</div></div>
     </div>
   </div>
 
   <!-- Key dates -->
-  <div class="highlights">
+  <div class="highlights" id="key-dates">
     <div class="highlight-card">
       <div class="highlight-card__label">Contract Signed</div>
       <div class="highlight-card__value">Mar 24</div>
@@ -199,11 +208,48 @@
     </div>
   </div>
 
-  <!-- Milestones legend -->
-  <div style="margin-bottom: 2rem;">
-    <span class="milestone"><span class="milestone-dot permit"></span> Permit / Site Work</span>
-    <span class="milestone"><span class="milestone-dot dryout"></span> Dry-Out (weather-tight)</span>
-    <span class="milestone"><span class="milestone-dot co"></span> Certificate of Occupancy</span>
+  <!-- Overall progress -->
+  <div class="overall-progress">
+    <div class="progress-track"><div class="progress-fill" id="overall-fill" style="width:0%"></div></div>
+    <div class="progress-meta">
+      <span id="progress-count">0 of 29 stages complete</span>
+      <span id="progress-pct">0% of draw completed</span>
+    </div>
+  </div>
+
+  <!-- Detail panel (shown when a task is clicked) -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-title">
+      <span id="detail-name"></span>
+      <span class="detail-close" id="detail-close">&times;</span>
+    </div>
+    <div class="detail-draw" id="detail-draw"></div>
+    <div class="detail-grid">
+      <div class="detail-field">
+        <label>Status</label>
+        <select id="detail-status">
+          <option value="pending">Not Started</option>
+          <option value="in-progress">In Progress</option>
+          <option value="complete">Complete</option>
+        </select>
+      </div>
+      <div class="detail-field">
+        <label>Start Date</label>
+        <input type="date" id="detail-start" />
+      </div>
+      <div class="detail-field">
+        <label>End Date</label>
+        <input type="date" id="detail-end" />
+      </div>
+    </div>
+    <div class="detail-field" style="margin-bottom:1rem;">
+      <label>Notes</label>
+      <textarea id="detail-notes" placeholder="Inspection notes, issues, change orders..."></textarea>
+    </div>
+    <div class="detail-actions">
+      <button class="btn-save" id="detail-save">Save</button>
+      <span class="save-msg" id="save-msg">Saved</span>
+    </div>
   </div>
 
   <!-- Gantt Chart -->
@@ -212,220 +258,19 @@
     <table class="gantt">
       <thead>
         <tr>
-          <th>Task</th>
-          <th>Draw %</th>
-          <th class="month-col">Mo 1<br><span style="font-size:0.5rem;opacity:0.6">May</span></th>
-          <th class="month-col">Mo 2<br><span style="font-size:0.5rem;opacity:0.6">Jun</span></th>
-          <th class="month-col">Mo 3<br><span style="font-size:0.5rem;opacity:0.6">Jul</span></th>
-          <th class="month-col">Mo 4<br><span style="font-size:0.5rem;opacity:0.6">Aug</span></th>
-          <th class="month-col">Mo 5<br><span style="font-size:0.5rem;opacity:0.6">Sep</span></th>
-          <th class="month-col">Mo 6<br><span style="font-size:0.5rem;opacity:0.6">Oct</span></th>
-          <th class="month-col">Mo 7<br><span style="font-size:0.5rem;opacity:0.6">Nov</span></th>
+          <th style="text-align:left">Task</th>
+          <th style="text-align:right">Draw</th>
+          <th>Dates</th>
+          <th class="month-col" id="mh-0"></th>
+          <th class="month-col" id="mh-1"></th>
+          <th class="month-col" id="mh-2"></th>
+          <th class="month-col" id="mh-3"></th>
+          <th class="month-col" id="mh-4"></th>
+          <th class="month-col" id="mh-5"></th>
+          <th class="month-col" id="mh-6"></th>
         </tr>
       </thead>
-      <tbody>
-        <!-- SITEWORK & FOUNDATION -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag sitework">Site &amp; Foundation</span></td></tr>
-        <tr>
-          <td>Permit</td><td>4%</td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-sitework"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Footings</td><td>6%</td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-sitework"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Foundation Walls</td><td>4%</td>
-          <td class="month-cell"><div class="gantt-bar quarter-right phase-sitework"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-sitework"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-
-        <!-- FRAMING -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag structure">Framing</span></td></tr>
-        <tr>
-          <td>Floor Framing</td><td>5%</td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Wall Framing</td><td>8%</td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-structure"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Roof Framing</td><td>6%</td>
-          <td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-structure"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-
-        <!-- EXTERIOR / DRY-OUT -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag exterior">Exterior &amp; Dry-Out</span></td></tr>
-        <tr>
-          <td>Doors &amp; Windows</td><td>5%</td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Roof Shingles</td><td>2%</td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Siding &amp; Trim</td><td>6%</td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar full phase-exterior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Exterior Veneer</td><td>0.5%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-exterior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Decks &amp; Porches</td><td>7%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-exterior"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-exterior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-
-        <!-- ROUGH MEP -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag rough">Rough MEP</span></td></tr>
-        <tr>
-          <td>Plumbing Rough</td><td>3%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>HVAC Rough</td><td>2%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Electrical Rough</td><td>3%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-rough"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Insulation</td><td>1%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-rough"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-
-        <!-- INTERIOR BUILDOUT -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag interior">Interior Buildout</span></td></tr>
-        <tr>
-          <td>Drywall</td><td>4%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar full phase-interior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Interior Doors &amp; Trim</td><td>4%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-interior"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
-          <td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Paint Prime</td><td>2%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-interior"></div></td>
-          <td class="month-cell"></td><td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Tile</td><td>4%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
-          <td class="month-cell"></td>
-        </tr>
-        <tr>
-          <td>Hardwood Flooring</td><td>4%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-interior"></div></td>
-          <td class="month-cell"></td>
-        </tr>
-
-        <!-- FINISHES -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag finishes">Finishes &amp; Fixtures</span></td></tr>
-        <tr>
-          <td>Cabinets &amp; Vanities</td><td>6%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
-        </tr>
-        <tr>
-          <td>Countertops</td><td>3%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
-        </tr>
-        <tr>
-          <td>Electrical Setout</td><td>3%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
-        </tr>
-        <tr>
-          <td>Plumbing Setout</td><td>3%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-finishes"></div></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
-        </tr>
-        <tr>
-          <td>HVAC Setout</td><td>1%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-finishes"></div></td>
-        </tr>
-
-        <!-- FINAL -->
-        <tr class="phase-header"><td colspan="9"><span class="phase-tag final">Final &amp; Punch</span></td></tr>
-        <tr>
-          <td>Hardware</td><td>0.5%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
-        </tr>
-        <tr>
-          <td>Shower Doors / Mirrors</td><td>0.5%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
-        </tr>
-        <tr>
-          <td>Shelving</td><td>0.5%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-left phase-final"></div></td>
-        </tr>
-        <tr>
-          <td>Final Paint</td><td>2%</td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar full phase-final"></div></td>
-        </tr>
-        <tr>
-          <td style="color:var(--gold-light)">Punch List / CO</td><td></td>
-          <td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td><td class="month-cell"></td>
-          <td class="month-cell"><div class="gantt-bar half-right phase-final" style="opacity:0.6;border:1px dashed var(--gold-light);background:transparent;"></div></td>
-        </tr>
-      </tbody>
+      <tbody id="gantt-body"></tbody>
     </table>
   </div>
 
@@ -433,14 +278,7 @@
   <div class="section-label">Draw Schedule &mdash; Per Cabin</div>
   <div style="overflow-x:auto; margin-bottom: 3rem;">
     <table class="draw-table">
-      <thead>
-        <tr>
-          <th>Stage</th>
-          <th>%</th>
-          <th>2BR ($410K)</th>
-          <th>3BR ($470K)</th>
-        </tr>
-      </thead>
+      <thead><tr><th>Stage</th><th>%</th><th>2BR ($410K)</th><th>3BR ($470K)</th></tr></thead>
       <tbody id="draw-body"></tbody>
     </table>
   </div>
@@ -452,176 +290,363 @@
   <!-- Key contract terms -->
   <div class="section-label">Key Contract Terms</div>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 3rem;">
-    <div class="highlight-card">
-      <div class="highlight-card__label">Deposit</div>
-      <div class="highlight-card__value">$60,000</div>
-      <div class="highlight-card__sub">Within 3 days of funding close, credited to final payment</div>
-    </div>
-    <div class="highlight-card">
-      <div class="highlight-card__label">Payment Terms</div>
-      <div class="highlight-card__value">Net 5 Days</div>
-      <div class="highlight-card__sub">6% annual interest + 2% late charge after due</div>
-    </div>
-    <div class="highlight-card">
-      <div class="highlight-card__label">Early Bonus</div>
-      <div class="highlight-card__value">$5,000</div>
-      <div class="highlight-card__sub">Per cabin, per 28-day period ahead of schedule</div>
-    </div>
-    <div class="highlight-card">
-      <div class="highlight-card__label">Late Penalty</div>
-      <div class="highlight-card__value">($5,000)</div>
-      <div class="highlight-card__sub">Per cabin, per 28-day period behind schedule</div>
-    </div>
-    <div class="highlight-card">
-      <div class="highlight-card__label">Warranty</div>
-      <div class="highlight-card__value">1 Year</div>
-      <div class="highlight-card__sub">Limited — latent defects only, excludes landscaping/driveways</div>
-    </div>
-    <div class="highlight-card">
-      <div class="highlight-card__label">Change Orders</div>
-      <div class="highlight-card__value">Written Only</div>
-      <div class="highlight-card__sub">Govt-required changes: cost + 25% overhead</div>
-    </div>
+    <div class="highlight-card"><div class="highlight-card__label">Deposit</div><div class="highlight-card__value">$60,000</div><div class="highlight-card__sub">Within 3 days of funding close, credited to final payment</div></div>
+    <div class="highlight-card"><div class="highlight-card__label">Payment Terms</div><div class="highlight-card__value">Net 5 Days</div><div class="highlight-card__sub">6% annual interest + 2% late charge after due</div></div>
+    <div class="highlight-card"><div class="highlight-card__label">Early Bonus</div><div class="highlight-card__value">$5,000</div><div class="highlight-card__sub">Per cabin, per 28-day period ahead of schedule</div></div>
+    <div class="highlight-card"><div class="highlight-card__label">Late Penalty</div><div class="highlight-card__value">($5,000)</div><div class="highlight-card__sub">Per cabin, per 28-day period behind schedule</div></div>
+    <div class="highlight-card"><div class="highlight-card__label">Warranty</div><div class="highlight-card__value">1 Year</div><div class="highlight-card__sub">Limited &mdash; latent defects only, excludes landscaping/driveways</div></div>
+    <div class="highlight-card"><div class="highlight-card__label">Change Orders</div><div class="highlight-card__value">Written Only</div><div class="highlight-card__sub">Govt-required changes: cost + 25% overhead</div></div>
   </div>
 
   <!-- Allowance comparison -->
   <div class="section-label">Allowance Comparison</div>
   <div style="overflow-x:auto; margin-bottom: 3rem;">
     <table class="draw-table">
-      <thead>
-        <tr><th>Item</th><th>2BR Cabin</th><th>3BR Cabin</th><th>Delta</th></tr>
-      </thead>
+      <thead><tr><th>Item</th><th>2BR Cabin</th><th>3BR Cabin</th><th>Delta</th></tr></thead>
       <tbody id="allowance-body"></tbody>
     </table>
   </div>
 
   <div class="source-note">
     Source: Willow Homes Fixed Price Construction Agreement, signed March 24, 2026.<br>
-    Timeline assumes permit issued ~May 1, 2026. Dates are estimates &mdash; actual schedule per contractor draws.
+    Timeline is editable &mdash; click any task to set actual dates and status. Data saved in browser.
   </div>
 
 </div>
 
 <script>
-// Draw schedule data
-const draws = [
-  ['Permit', 4],
-  ['Footings', 6],
-  ['Foundation Walls', 4],
-  ['Floor Framing', 5],
-  ['Wall Framing', 8],
-  ['Roof Framing', 6],
-  ['Exterior Doors & Windows', 5],
-  ['Roof Shingles', 2],
-  ['Exterior Siding & Trim', 6],
-  ['Exterior Veneer', 0.5],
-  ['Decks & Porches', 7],
-  ['Plumbing Rough', 3],
-  ['HVAC Rough', 2],
-  ['Electrical Rough', 3],
-  ['Insulation', 1],
-  ['Drywall', 4],
-  ['Interior Doors & Trim', 4],
-  ['Paint Prime', 2],
-  ['Tile', 4],
-  ['Hardwood Flooring', 4],
-  ['Cabinets & Vanities', 6],
-  ['Countertops', 3],
-  ['Electrical Setout', 3],
-  ['Plumbing Setout', 3],
-  ['HVAC Setout', 1],
-  ['Interior Hardware', 0.5],
-  ['Shower Doors / Mirrors', 0.5],
-  ['Shelving', 0.5],
-  ['Final Paint', 2],
+// ─── Task data ───
+const TASKS = [
+  // [id, name, drawPct, phase, estStartMonth, estEndMonth]
+  // months 0-6 map to the 7-month window
+  { id: 'permit',       name: 'Permit',                 pct: 4,   phase: 'sitework',  em: [0, 0.4] },
+  { id: 'footings',     name: 'Footings',               pct: 6,   phase: 'sitework',  em: [0.4, 0.9] },
+  { id: 'foundation',   name: 'Foundation Walls',        pct: 4,   phase: 'sitework',  em: [0.8, 1.4] },
+  { id: 'frame-floor',  name: 'Floor Framing',           pct: 5,   phase: 'structure', em: [1.3, 1.7] },
+  { id: 'frame-walls',  name: 'Wall Framing',            pct: 8,   phase: 'structure', em: [1.6, 2.4] },
+  { id: 'frame-roof',   name: 'Roof Framing',            pct: 6,   phase: 'structure', em: [2.2, 2.7] },
+  { id: 'doors-win',    name: 'Doors & Windows',         pct: 5,   phase: 'exterior',  em: [2.5, 3.0] },
+  { id: 'shingles',     name: 'Roof Shingles',           pct: 2,   phase: 'exterior',  em: [2.6, 3.0] },
+  { id: 'siding',       name: 'Siding & Trim',           pct: 6,   phase: 'exterior',  em: [3.0, 3.9] },
+  { id: 'veneer',       name: 'Exterior Veneer',         pct: 0.5, phase: 'exterior',  em: [3.2, 3.6] },
+  { id: 'decks',        name: 'Decks & Porches',         pct: 7,   phase: 'exterior',  em: [3.5, 4.4] },
+  { id: 'plumb-rough',  name: 'Plumbing Rough',          pct: 3,   phase: 'rough',     em: [3.0, 3.5] },
+  { id: 'hvac-rough',   name: 'HVAC Rough',              pct: 2,   phase: 'rough',     em: [3.0, 3.5] },
+  { id: 'elec-rough',   name: 'Electrical Rough',        pct: 3,   phase: 'rough',     em: [3.1, 3.6] },
+  { id: 'insulation',   name: 'Insulation',              pct: 1,   phase: 'rough',     em: [3.5, 3.8] },
+  { id: 'drywall',      name: 'Drywall',                 pct: 4,   phase: 'interior',  em: [3.8, 4.6] },
+  { id: 'int-trim',     name: 'Interior Doors & Trim',   pct: 4,   phase: 'interior',  em: [4.4, 5.2] },
+  { id: 'paint-prime',  name: 'Paint Prime',             pct: 2,   phase: 'interior',  em: [4.6, 5.0] },
+  { id: 'tile',         name: 'Tile',                    pct: 4,   phase: 'interior',  em: [5.0, 5.5] },
+  { id: 'hardwood',     name: 'Hardwood Flooring',       pct: 4,   phase: 'interior',  em: [5.0, 5.5] },
+  { id: 'cabinets',     name: 'Cabinets & Vanities',     pct: 6,   phase: 'finishes',  em: [5.3, 6.0] },
+  { id: 'countertops',  name: 'Countertops',             pct: 3,   phase: 'finishes',  em: [5.8, 6.2] },
+  { id: 'elec-set',     name: 'Electrical Setout',       pct: 3,   phase: 'finishes',  em: [5.5, 6.1] },
+  { id: 'plumb-set',    name: 'Plumbing Setout',         pct: 3,   phase: 'finishes',  em: [5.6, 6.2] },
+  { id: 'hvac-set',     name: 'HVAC Setout',             pct: 1,   phase: 'finishes',  em: [5.8, 6.1] },
+  { id: 'hardware',     name: 'Interior Hardware',       pct: 0.5, phase: 'final',     em: [6.0, 6.3] },
+  { id: 'shower-mir',   name: 'Shower Doors / Mirrors',  pct: 0.5, phase: 'final',     em: [6.0, 6.3] },
+  { id: 'shelving',     name: 'Shelving',                pct: 0.5, phase: 'final',     em: [6.0, 6.3] },
+  { id: 'final-paint',  name: 'Final Paint',             pct: 2,   phase: 'final',     em: [6.1, 6.7] },
 ];
 
-const price2 = 410000;
-const price3 = 470000;
-const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-
-let cum2 = 0, cum3 = 0;
-const tbody = document.getElementById('draw-body');
-draws.forEach(([name, pct]) => {
-  const a2 = Math.round(price2 * pct / 100);
-  const a3 = Math.round(price3 * pct / 100);
-  cum2 += a2;
-  cum3 += a3;
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${name}</td><td>${pct}%</td><td>${fmt(a2)}</td><td>${fmt(a3)}</td>`;
-  tbody.appendChild(tr);
-});
-// Total row
-const totalTr = document.createElement('tr');
-totalTr.className = 'total';
-totalTr.innerHTML = `<td>Total</td><td>100%</td><td>${fmt(price2)}</td><td>${fmt(price3)}</td>`;
-tbody.appendChild(totalTr);
-
-// Cumulative spend visualization
-const totalAll = (price2 * 2) + (price3 * 2); // $1,760,000
-const phases = [
-  { label: 'Site & Foundation', pct: 14, month: 'May-Jun', color: '#6b8a73' },
-  { label: 'Framing', pct: 19, month: 'Jun-Jul', color: '#a36f4d' },
-  { label: 'Exterior & Dry-Out', pct: 20.5, month: 'Jul-Sep', color: '#7f9bb0' },
-  { label: 'Rough MEP', pct: 9, month: 'Aug', color: '#9b7fb0' },
-  { label: 'Interior Buildout', pct: 14, month: 'Sep-Oct', color: '#b09b7f' },
-  { label: 'Finishes & Fixtures', pct: 16, month: 'Oct-Nov', color: '#7fb0a0' },
-  { label: 'Final & Punch', pct: 3.5, month: 'Nov', color: '#c08e6e' },
+const PHASES = [
+  { key: 'sitework',  label: 'Site & Foundation' },
+  { key: 'structure', label: 'Framing' },
+  { key: 'exterior',  label: 'Exterior & Dry-Out' },
+  { key: 'rough',     label: 'Rough MEP' },
+  { key: 'interior',  label: 'Interior Buildout' },
+  { key: 'finishes',  label: 'Finishes & Fixtures' },
+  { key: 'final',     label: 'Final & Punch' },
 ];
 
-let cumPct = 0;
-const chart = document.getElementById('spend-chart');
-phases.forEach(p => {
-  cumPct += p.pct;
-  const cumDollars = Math.round(totalAll * cumPct / 100);
-  const row = document.createElement('div');
-  row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;';
-  row.innerHTML = `
-    <div style="width:150px;font-size:0.75rem;color:var(--sand);text-align:right;flex-shrink:0;">${p.label}</div>
-    <div style="flex:1;height:20px;background:var(--forest);border-radius:2px;overflow:hidden;position:relative;">
-      <div style="width:${cumPct}%;height:100%;background:${p.color};border-radius:2px;transition:width 0.5s;"></div>
-    </div>
-    <div style="width:120px;font-size:0.7rem;color:var(--parchment);font-variant-numeric:tabular-nums;flex-shrink:0;">${fmt(cumDollars)} <span style="color:var(--stone);">(${cumPct.toFixed(1)}%)</span></div>
-  `;
-  chart.appendChild(row);
-});
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const STORE_KEY = 'sb-build-timeline';
+const price2 = 410000, price3 = 470000;
+const fmt = n => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+const fmtD = n => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-// Allowance comparison
-const allowances = [
-  ['Door Hardware', 707.30, 830.50],
-  ['Exterior Doors', 3900, 3900],
-  ['Windows', 29920, 32340],
-  ['Tile Material', 4202.90, 4202.90],
-  ['Tile Labor', 7300, 7300],
-  ['Hardwood Floors', 10620, 13070],
-  ['Cabinets / Vanities', 15600, 18000],
-  ['Cabinet Knobs & Pulls', 330, 330],
-  ['Countertops', 4510, 5250],
-  ['Shower Doors', 1500, 1500],
-  ['Lighting Fixtures', 3377, 4257],
-  ['Appliances', 7000, 7000],
-  ['Plumbing Fixtures & Bath Hardware', 7568, 9454],
-  ['Porch Material', 22792, 22792],
-  ['Mirrors', 250, 300],
-  ['Shelving', 1040, 1200],
-  ['Foundation', 26348.76, 26348.76],
-  ['Siding Materials', 11320, 12850],
-];
+// ─── State ───
+let state = loadState();
+let selectedTask = null;
 
-const fmtD = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-const aTbody = document.getElementById('allowance-body');
-let tot2 = 0, tot3 = 0;
-allowances.forEach(([name, a2, a3]) => {
-  tot2 += a2; tot3 += a3;
-  const delta = a3 - a2;
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${name}</td><td>${fmtD(a2)}</td><td>${fmtD(a3)}</td><td style="color:${delta > 0 ? 'var(--gold-light)' : delta < 0 ? '#7fb0a0' : 'var(--stone)'}">${delta > 0 ? '+' : ''}${fmtD(delta)}</td>`;
-  aTbody.appendChild(tr);
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+function saveState() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+function getTask(id) {
+  if (!state[id]) state[id] = { status: 'pending', start: '', end: '', notes: '' };
+  return state[id];
+}
+
+// ─── Timeline window ───
+// Compute from permit start or default to estimated ~May 2026
+function getTimelineStart() {
+  const permitState = getTask('permit');
+  if (permitState.start) {
+    const d = new Date(permitState.start + 'T00:00:00');
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  }
+  return new Date(2026, 4, 1); // May 2026
+}
+
+function getMonthHeaders() {
+  const start = getTimelineStart();
+  const headers = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+    headers.push({ month: d.getMonth(), year: d.getFullYear(), label: MONTH_NAMES[d.getMonth()], date: d });
+  }
+  return headers;
+}
+
+// ─── Gantt bar position ───
+function getBarStyle(task) {
+  const ts = getTask(task.id);
+  const months = getMonthHeaders();
+  const windowStart = months[0].date.getTime();
+  const windowEnd = new Date(months[6].date.getFullYear(), months[6].date.getMonth() + 1, 0).getTime();
+  const windowSpan = windowEnd - windowStart;
+
+  let startPct, endPct;
+
+  if (ts.start && ts.end) {
+    const s = new Date(ts.start + 'T00:00:00').getTime();
+    const e = new Date(ts.end + 'T00:00:00').getTime();
+    startPct = Math.max(0, (s - windowStart) / windowSpan) * 100;
+    endPct = Math.min(100, (e - windowStart) / windowSpan) * 100;
+  } else if (ts.start) {
+    const s = new Date(ts.start + 'T00:00:00').getTime();
+    startPct = Math.max(0, (s - windowStart) / windowSpan) * 100;
+    endPct = Math.min(100, startPct + (task.em[1] - task.em[0]) / 7 * 100);
+  } else {
+    // Use estimates
+    startPct = (task.em[0] / 7) * 100;
+    endPct = (task.em[1] / 7) * 100;
+  }
+
+  return { left: startPct, width: Math.max(1, endPct - startPct) };
+}
+
+// ─── Render ───
+function render() {
+  const months = getMonthHeaders();
+  // Month headers
+  for (let i = 0; i < 7; i++) {
+    const th = document.getElementById('mh-' + i);
+    th.innerHTML = `Mo ${i+1}<br><span style="font-size:0.5rem;opacity:0.6">${months[i].label}</span>`;
+  }
+
+  const tbody = document.getElementById('gantt-body');
+  tbody.innerHTML = '';
+  let currentPhase = '';
+  let completePct = 0;
+  let completeCount = 0;
+
+  TASKS.forEach(task => {
+    // Phase header
+    if (task.phase !== currentPhase) {
+      currentPhase = task.phase;
+      const phase = PHASES.find(p => p.key === currentPhase);
+      const hdr = document.createElement('tr');
+      hdr.className = 'phase-header';
+      hdr.innerHTML = `<td colspan="10"><span class="phase-tag ${currentPhase}">${phase.label}</span></td>`;
+      tbody.appendChild(hdr);
+    }
+
+    const ts = getTask(task.id);
+    if (ts.status === 'complete') { completePct += task.pct; completeCount++; }
+
+    // Date display
+    let dateStr = '';
+    if (ts.start || ts.end) {
+      const fmtDate = d => { if (!d) return '?'; const p = d.split('-'); return `${parseInt(p[1])}/${parseInt(p[2])}`; };
+      dateStr = `${fmtDate(ts.start)}-${fmtDate(ts.end)}`;
+    }
+
+    const tr = document.createElement('tr');
+    tr.className = 'task-row' + (selectedTask === task.id ? ' selected' : '');
+    tr.dataset.id = task.id;
+
+    // Build cells
+    let cells = `
+      <td><div class="task-name"><span class="task-status-dot ${ts.status}"></span>${task.name}</div></td>
+      <td class="task-pct">${task.pct}%</td>
+      <td class="task-dates">${dateStr}</td>
+    `;
+
+    // 7 month cells with single bar spanning across them via a wrapper
+    for (let i = 0; i < 7; i++) {
+      cells += `<td class="month-cell" data-month="${i}"></td>`;
+    }
+
+    tr.innerHTML = cells;
+    tr.addEventListener('click', () => openDetail(task.id));
+    tbody.appendChild(tr);
+
+    // Draw bar across month cells
+    const bar = getBarStyle(task);
+    const monthCells = tr.querySelectorAll('.month-cell');
+    // Find which cells the bar spans
+    for (let i = 0; i < 7; i++) {
+      const cellStart = (i / 7) * 100;
+      const cellEnd = ((i + 1) / 7) * 100;
+      if (bar.left + bar.width > cellStart && bar.left < cellEnd) {
+        const barEl = document.createElement('div');
+        barEl.className = `gantt-bar bar-${task.phase} ${ts.status}`;
+        // Clip to this cell
+        const clippedLeft = Math.max(0, bar.left - cellStart) / (100 / 7) * 100;
+        const clippedRight = Math.min(100 / 7, bar.left + bar.width - cellStart) / (100 / 7) * 100;
+        barEl.style.left = clippedLeft + '%';
+        barEl.style.width = (clippedRight - clippedLeft) + '%';
+        monthCells[i].style.position = 'relative';
+        monthCells[i].appendChild(barEl);
+      }
+    }
+  });
+
+  // Overall progress
+  document.getElementById('overall-fill').style.width = completePct + '%';
+  document.getElementById('progress-count').textContent = `${completeCount} of ${TASKS.length} stages complete`;
+  document.getElementById('progress-pct').textContent = `${completePct.toFixed(1)}% of draw completed`;
+}
+
+// ─── Detail panel ───
+function openDetail(id) {
+  selectedTask = id;
+  const task = TASKS.find(t => t.id === id);
+  const ts = getTask(id);
+  const panel = document.getElementById('detail-panel');
+
+  document.getElementById('detail-name').textContent = task.name;
+  const draw2 = Math.round(price2 * task.pct / 100);
+  const draw3 = Math.round(price3 * task.pct / 100);
+  document.getElementById('detail-draw').innerHTML =
+    `Draw: <strong>${task.pct}%</strong> &mdash; ${fmt(draw2)} per 2BR cabin, ${fmt(draw3)} per 3BR cabin &mdash; <strong>${fmt((draw2 * 2) + (draw3 * 2))}</strong> total (all 4)`;
+
+  document.getElementById('detail-status').value = ts.status;
+  document.getElementById('detail-start').value = ts.start || '';
+  document.getElementById('detail-end').value = ts.end || '';
+  document.getElementById('detail-notes').value = ts.notes || '';
+
+  panel.classList.add('visible');
+  document.getElementById('save-msg').classList.remove('show');
+  render();
+}
+
+function closeDetail() {
+  selectedTask = null;
+  document.getElementById('detail-panel').classList.remove('visible');
+  render();
+}
+
+function saveDetail() {
+  if (!selectedTask) return;
+  const ts = getTask(selectedTask);
+  ts.status = document.getElementById('detail-status').value;
+  ts.start = document.getElementById('detail-start').value;
+  ts.end = document.getElementById('detail-end').value;
+  ts.notes = document.getElementById('detail-notes').value;
+  saveState();
+  render();
+  const msg = document.getElementById('save-msg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 1500);
+}
+
+document.getElementById('detail-close').addEventListener('click', closeDetail);
+document.getElementById('detail-save').addEventListener('click', saveDetail);
+
+// Also save on Enter in date fields
+['detail-start', 'detail-end'].forEach(id => {
+  document.getElementById(id).addEventListener('change', saveDetail);
 });
-const totTr = document.createElement('tr');
-totTr.className = 'total';
-totTr.innerHTML = `<td>Total Allowances</td><td>${fmtD(tot2)}</td><td>${fmtD(tot3)}</td><td style="color:var(--gold-light)">+${fmtD(tot3-tot2)}</td>`;
-aTbody.appendChild(totTr);
+document.getElementById('detail-status').addEventListener('change', saveDetail);
+
+// ─── Draw schedule table ───
+function renderDrawTable() {
+  const tbody = document.getElementById('draw-body');
+  TASKS.forEach(t => {
+    const a2 = Math.round(price2 * t.pct / 100);
+    const a3 = Math.round(price3 * t.pct / 100);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${t.name}</td><td>${t.pct}%</td><td>${fmt(a2)}</td><td>${fmt(a3)}</td>`;
+    tbody.appendChild(tr);
+  });
+  const total = document.createElement('tr');
+  total.className = 'total';
+  total.innerHTML = `<td>Total</td><td>100%</td><td>${fmt(price2)}</td><td>${fmt(price3)}</td>`;
+  tbody.appendChild(total);
+}
+
+// ─── Cumulative spend chart ───
+function renderSpendChart() {
+  const totalAll = (price2 * 2) + (price3 * 2);
+  const phaseGroups = [
+    { label: 'Site & Foundation', pct: 14, color: '#6b8a73' },
+    { label: 'Framing', pct: 19, color: '#a36f4d' },
+    { label: 'Exterior & Dry-Out', pct: 20.5, color: '#7f9bb0' },
+    { label: 'Rough MEP', pct: 9, color: '#9b7fb0' },
+    { label: 'Interior Buildout', pct: 14, color: '#b09b7f' },
+    { label: 'Finishes & Fixtures', pct: 16, color: '#7fb0a0' },
+    { label: 'Final & Punch', pct: 3.5, color: '#c08e6e' },
+  ];
+  let cum = 0;
+  const chart = document.getElementById('spend-chart');
+  phaseGroups.forEach(p => {
+    cum += p.pct;
+    const d = Math.round(totalAll * cum / 100);
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;';
+    row.innerHTML = `
+      <div style="width:150px;font-size:0.75rem;color:var(--sand);text-align:right;flex-shrink:0;">${p.label}</div>
+      <div style="flex:1;height:20px;background:var(--forest);border-radius:2px;overflow:hidden;">
+        <div style="width:${cum}%;height:100%;background:${p.color};border-radius:2px;"></div>
+      </div>
+      <div style="width:120px;font-size:0.7rem;color:var(--parchment);font-variant-numeric:tabular-nums;flex-shrink:0;">${fmt(d)} <span style="color:var(--stone);">(${cum.toFixed(1)}%)</span></div>
+    `;
+    chart.appendChild(row);
+  });
+}
+
+// ─── Allowance comparison ───
+function renderAllowances() {
+  const items = [
+    ['Door Hardware', 707.30, 830.50], ['Exterior Doors', 3900, 3900],
+    ['Windows', 29920, 32340], ['Tile Material', 4202.90, 4202.90],
+    ['Tile Labor', 7300, 7300], ['Hardwood Floors', 10620, 13070],
+    ['Cabinets / Vanities', 15600, 18000], ['Cabinet Knobs & Pulls', 330, 330],
+    ['Countertops', 4510, 5250], ['Shower Doors', 1500, 1500],
+    ['Lighting Fixtures', 3377, 4257], ['Appliances', 7000, 7000],
+    ['Plumbing Fixtures & Bath Hardware', 7568, 9454], ['Porch Material', 22792, 22792],
+    ['Mirrors', 250, 300], ['Shelving', 1040, 1200],
+    ['Foundation', 26348.76, 26348.76], ['Siding Materials', 11320, 12850],
+  ];
+  const tbody = document.getElementById('allowance-body');
+  let t2 = 0, t3 = 0;
+  items.forEach(([name, a2, a3]) => {
+    t2 += a2; t3 += a3;
+    const d = a3 - a2;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${name}</td><td>${fmtD(a2)}</td><td>${fmtD(a3)}</td><td style="color:${d > 0 ? 'var(--gold-light)' : d < 0 ? '#7fb0a0' : 'var(--stone)'}">${d > 0 ? '+' : ''}${fmtD(d)}</td>`;
+    tbody.appendChild(tr);
+  });
+  const tot = document.createElement('tr');
+  tot.className = 'total';
+  tot.innerHTML = `<td>Total Allowances</td><td>${fmtD(t2)}</td><td>${fmtD(t3)}</td><td style="color:var(--gold-light)">+${fmtD(t3-t2)}</td>`;
+  tbody.appendChild(tot);
+}
+
+// ─── Init ───
+render();
+renderDrawTable();
+renderSpendChart();
+renderAllowances();
 </script>
 </body>
 </html>
