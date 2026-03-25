@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dock Permit Checklist — Stonebranch Hub</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --forest: #2d2b26; --forest-mid: #383530; --moss: #5d594b; --sage: #7f775b;
+      --gold: #a36f4d; --gold-light: #c08e6e; --cream: #e4dacb; --parchment: #cec1ad;
+      --sand: #b0a590; --stone: #8a8172; --bark: #3a3630; --charcoal: #22211e;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Jost', -apple-system, sans-serif;
+    }
+    html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-weight: 300; background: var(--charcoal); color: var(--cream); line-height: 1.7; min-height: 100vh; }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    /* Header */
+    .hub-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(184,144,84,0.2); }
+    .hub-brand { display: flex; flex-direction: column; gap: 0.25rem; }
+    .hub-mark { font-family: var(--font-serif); font-size: 2.25rem; font-weight: 300; color: var(--cream); letter-spacing: 0.02em; }
+    .hub-mark span { color: var(--gold); }
+    .hub-sub { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); }
+    .hub-nav { display: flex; align-items: center; gap: 1.5rem; }
+    .hub-nav a { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); transition: color 0.2s; padding: 0.25rem 0; }
+    .hub-nav a:hover { color: var(--cream); }
+    .hub-nav a.active { color: var(--gold); border-bottom: 1px solid var(--gold); }
+
+    /* Section labels */
+    .section-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(184,144,84,0.2); }
+
+    /* Summary card */
+    .summary { background: var(--forest); padding: 2rem 2.5rem; margin-bottom: 2.5rem; }
+    .summary-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300; margin-bottom: 0.75rem; }
+    .summary-body { font-size: 0.85rem; color: rgba(242,236,224,0.6); line-height: 1.75; }
+    .summary-body strong { color: var(--cream); font-weight: 400; }
+    .summary-stats { display: flex; gap: 2rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(242,236,224,0.08); }
+    .summary-stat { }
+    .summary-stat__num { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 300; color: var(--cream); line-height: 1; }
+    .summary-stat__lbl { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); opacity: 0.75; }
+
+    /* Contact card */
+    .contact-card { background: var(--forest-mid); padding: 1.5rem 2rem; margin-bottom: 2.5rem; border-left: 2px solid var(--gold); display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+    .contact-card__name { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--cream); }
+    .contact-card__role { font-size: 0.75rem; color: var(--stone); }
+    .contact-card__detail { font-size: 0.8rem; color: rgba(242,236,224,0.55); margin-top: 0.25rem; }
+    .contact-card__phone { font-size: 0.85rem; color: var(--gold); text-align: right; }
+
+    /* Phase timeline */
+    .phase { margin-bottom: 2.5rem; }
+    .phase-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .phase-num { width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 500; background: rgba(163,111,77,0.15); color: var(--gold); border: 1px solid rgba(163,111,77,0.3); flex-shrink: 0; }
+    .phase-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 300; color: var(--cream); }
+    .phase-note { font-size: 0.8rem; color: rgba(242,236,224,0.45); margin-left: 3rem; margin-bottom: 1rem; line-height: 1.6; }
+
+    /* Checklist items */
+    .checklist { display: flex; flex-direction: column; gap: 0.5rem; margin-left: 3rem; }
+    .check-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(242,236,224,0.06); cursor: pointer; transition: border-color 0.2s; }
+    .check-item:hover { border-color: rgba(184,144,84,0.2); }
+    .check-item.done { opacity: 0.5; }
+    .check-box { width: 1.1rem; height: 1.1rem; border-radius: 2px; border: 1.5px solid rgba(242,236,224,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.15rem; font-size: 0.6rem; color: transparent; transition: all 0.2s; }
+    .check-item.done .check-box { border-color: #a09878; color: #a09878; background: rgba(127,119,91,0.15); }
+    .check-text { flex: 1; }
+    .check-title { font-size: 0.8rem; font-weight: 400; color: var(--cream); line-height: 1.4; }
+    .check-detail { font-size: 0.75rem; color: rgba(242,236,224,0.4); line-height: 1.5; margin-top: 0.125rem; }
+    .check-tag { font-size: 0.5rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.15rem 0.4rem; margin-left: 0.5rem; vertical-align: middle; }
+    .tag-brian { background: rgba(163,111,77,0.15); color: var(--gold); border: 1px solid rgba(163,111,77,0.25); }
+    .tag-engineer { background: rgba(120,130,160,0.15); color: #a0adc8; border: 1px solid rgba(120,130,160,0.25); }
+    .tag-surveyor { background: rgba(107,142,135,0.15); color: #8ab5ac; border: 1px solid rgba(107,142,135,0.25); }
+    .tag-may { background: rgba(127,119,91,0.15); color: #b5ad8f; border: 1px solid rgba(127,119,91,0.25); }
+
+    /* Compliance box */
+    .compliance { background: var(--forest); padding: 2rem 2.5rem; margin-bottom: 2rem; }
+    .compliance-title { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 300; margin-bottom: 1rem; }
+    .compliance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .compliance-rule { padding: 0.75rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(242,236,224,0.06); }
+    .compliance-rule__label { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); margin-bottom: 0.25rem; }
+    .compliance-rule__value { font-size: 0.85rem; color: var(--cream); }
+    .compliance-rule__note { font-size: 0.7rem; color: rgba(242,236,224,0.4); margin-top: 0.125rem; }
+
+    /* Fee table */
+    .fee-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+    .fee-table th { font-size: 0.55rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(242,236,224,0.08); }
+    .fee-table td { font-size: 0.8rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(242,236,224,0.04); color: rgba(242,236,224,0.7); }
+    .fee-table td:last-child { color: var(--cream); text-align: right; }
+
+    /* Progress counter */
+    .progress-counter { position: fixed; bottom: 2rem; right: 2rem; background: var(--forest); border: 1px solid rgba(163,111,77,0.3); padding: 0.6rem 1.2rem; font-size: 0.75rem; color: var(--cream); z-index: 100; }
+    .progress-counter__num { color: var(--gold); font-weight: 500; }
+
+    /* Footer */
+    .hub-footer { padding-top: 3rem; margin-top: 3rem; border-top: 1px solid rgba(242,236,224,0.07); text-align: center; }
+    .hub-footer-text { font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(242,236,224,0.25); }
+
+    @media (max-width: 768px) {
+      .hub-header { flex-direction: column; }
+      .hub-nav { justify-content: flex-start; }
+      .contact-card { grid-template-columns: 1fr; }
+      .compliance-grid { grid-template-columns: 1fr; }
+      .checklist { margin-left: 0; }
+      .phase-note { margin-left: 0; }
+      .summary-stats { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="hub-header">
+      <div class="hub-brand">
+        <div class="hub-mark">Stonebranch <span>Hub</span></div>
+        <div class="hub-sub">Dock Permit Checklist &ensp;·&ensp; Alabama Power NRP</div>
+      </div>
+      <nav class="hub-nav">
+        <a href="index.html">Dashboard</a>
+        <a href="documents.html">Documents</a>
+        <a href="dock-permit.html" class="active">Dock Permit</a>
+      </nav>
+    </header>
+
+    <!-- Summary -->
+    <div class="summary">
+      <h2 class="summary-title">Alabama Power Non-Residential Permit (NRP)</h2>
+      <p class="summary-body">
+        Required for any commercial dock/shoreline construction on Lake Martin (FERC-licensed reservoir).
+        Four phases: <strong>Phase 1</strong> (initial review) → <strong>Phase 2</strong> (agency consultation) →
+        <strong>Phase 3</strong> (FERC review, 6–12 months) → <strong>Phase 4</strong> (construction, 2 years allowed).
+        No construction may begin until FERC issues its order AND Alabama Power issues the permit.
+        Must disclose ALL future development plans — APC will not entertain multiple applications for a single development.
+      </p>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="summary-stat__num">$3–5K</div>
+          <div class="summary-stat__lbl">Application Fee</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat__num">6–12 mo</div>
+          <div class="summary-stat__lbl">FERC Review</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat__num">2 yr</div>
+          <div class="summary-stat__lbl">Construction Window</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat__num">491'</div>
+          <div class="summary-stat__lbl">Full Pool MSL</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section-label">Alabama Power Contact</div>
+    <div class="contact-card">
+      <div>
+        <div class="contact-card__name">Unzell Kelley</div>
+        <div class="contact-card__role">Sr. Real Estate Specialist — Alabama Power</div>
+        <div class="contact-card__detail">2030 7th Street South, Clanton, AL 35045</div>
+      </div>
+      <div>
+        <div class="contact-card__phone">205.517.0885</div>
+      </div>
+    </div>
+
+    <!-- Phase 1: Gather & Prepare -->
+    <div class="section-label">Phase 1 — Application Preparation</div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">A</div>
+        <div class="phase-title">Documents to Obtain</div>
+      </div>
+      <div class="checklist" data-group="docs">
+        <div class="check-item" data-key="deed">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Property deed <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Copy of deed for all parcels within the project area.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="survey">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Boundary survey <span class="check-tag tag-surveyor">Surveyor</span></div>
+            <div class="check-detail">Must be stamped and signed by a registered land surveyor. Must be current.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="permits">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Copies of all existing permits <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">USACE, Alabama Power, ADEM, county, city, zoning, health dept, building permits — anything previously issued for this site.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="owner-approval">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Property owner written approval <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Required if applicant entity differs from property owner. Letter authorizing Vulcan OZB to apply.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">B</div>
+        <div class="phase-title">Site Data to Determine</div>
+      </div>
+      <div class="checklist" data-group="data">
+        <div class="check-item" data-key="gps">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">GPS coordinates (latitude / longitude) <span class="check-tag tag-may">May</span></div>
+            <div class="check-detail">Precise coords for the proposed dock/shoreline construction site.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="smp">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">SMP Classification for the site <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Shoreline Management Plan classification. Determines what's permissible. Contact APC or check FERC records.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="elevations">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">FERC boundary &amp; elevation contours <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">Four values needed: FERC Project boundary contour, flood easement contour, full pool (491' MSL for Lake Martin), and fee ownership contour (491' MSL).</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="acreage">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Acreage inside &amp; outside FERC Project boundary <span class="check-tag tag-surveyor">Surveyor</span></div>
+            <div class="check-detail">Total property acreage in Project boundary, construction acreage inside, construction acreage outside.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="vessels">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Maximum vessel capacity plan <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Max boats at one time including temporary mooring and PWC. Determines $3K vs $5K fee (threshold: 30 slips).</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="ferc-num">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">FERC Project Number for Lake Martin <span class="check-tag tag-may">May</span></div>
+            <div class="check-detail">Required on the application cover sheet. Martin Dam = FERC Project No. 349.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">C</div>
+        <div class="phase-title">Engineering Drawings</div>
+      </div>
+      <div class="phase-note">
+        All drawings must be stamped and signed by a registered professional engineer.
+        See the uploaded Drawing Example in the Document Center for format reference.
+      </div>
+      <div class="checklist" data-group="drawings">
+        <div class="check-item" data-key="plans-in">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Plan views — structures INSIDE Project boundary <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">Plans, elevations, typical cross sections. All dimensions, materials, piling counts/spacing.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="dock-distances">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Dock distances <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">Length from shoreline, distance to opposite shoreline, distance to adjacent docks/ramps/buoys.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="plans-out">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Plan views — structures OUTSIDE Project boundary <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">General arrangement drawings with descriptions. If ANY portion touches the boundary, the whole facility counts as inside.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="existing-plans">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Existing structure drawings <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">Plan views of all existing structures inside and outside the Project boundary.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="sanitation">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Sanitation system drawings (if applicable) <span class="check-tag tag-engineer">Engineer</span></div>
+            <div class="check-detail">Plan, elevation, section drawings + description of operation for any proposed sanitation system.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">D</div>
+        <div class="phase-title">Structures List (Word Doc)</div>
+      </div>
+      <div class="phase-note">
+        Must be a separate Word document. Four tables required — see uploaded Structures List Example.
+      </div>
+      <div class="checklist" data-group="structures">
+        <div class="check-item" data-key="struct-exist-in">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Existing structures inside FERC boundary <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Table 1: Each structure with dimensions + whether being modified. Docks, roads, gravel pads, buildings, ramps, seawalls.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="struct-new-in">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Proposed new structures inside FERC boundary <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Table 2: Each new structure with dimensions. Include total vessel mooring count.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="struct-exist-out">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Existing structures outside FERC boundary <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Table 3: Structure name, dimensions, and square footage.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="struct-new-out">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Proposed structures outside FERC boundary <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Table 4: Structure name, dimensions, square footage. Includes cabins, roads, parking, etc.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">E</div>
+        <div class="phase-title">Photographs</div>
+      </div>
+      <div class="phase-note">
+        FERC will NOT visit the site — they rely entirely on your photographs. Caption everything with direction facing.
+      </div>
+      <div class="checklist" data-group="photos">
+        <div class="check-item" data-key="photo-aerial">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Aerial photograph <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Showing general location of proposed facility. Drone shot or satellite with markup.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="photo-shoreline">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Shoreline photos showing OHW mark <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Per Unzell: "site pictures of the existing shoreline structures or the proposed shoreline area — we need photos showing shoreline and the OHW (Ordinary High Water) mark."</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="photo-site">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Construction site photos — captioned with direction <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Multiple angles. Label each: "View facing east from County Road" etc.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="photo-existing">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Existing structure photos (if any) <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Labeled photos of any existing facilities on the property.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="photo-adjacent">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Adjacent area photos <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Standing on shoreline, photos in each direction showing neighboring properties/features.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num">F</div>
+        <div class="phase-title">Application Form &amp; Description</div>
+      </div>
+      <div class="checklist" data-group="app">
+        <div class="check-item" data-key="app-form">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Complete Phase 1 Application form <span class="check-tag tag-may">May</span></div>
+            <div class="check-detail">Cover sheet + all sections (A through G). Can be drafted once all data is gathered.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="description">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Written description of proposed facility &amp; use <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Include all future development plans (APC requires full disclosure — no piecemeal applications). Proposed start and completion dates.</div>
+          </div>
+        </div>
+        <div class="check-item" data-key="waste-plan">
+          <div class="check-box">✓</div>
+          <div class="check-text">
+            <div class="check-title">Solid waste disposal plan <span class="check-tag tag-brian">Brian</span></div>
+            <div class="check-detail">Description of garbage/waste disposal method — which company/agency provides service.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compliance Rules -->
+    <div class="section-label">Key Compliance Rules — Lake Martin</div>
+    <div class="compliance">
+      <h3 class="compliance-title">Structure Limits &amp; Setbacks</h3>
+      <div class="compliance-grid">
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Setback from Property Line</div>
+          <div class="compliance-rule__value">25 feet minimum</div>
+          <div class="compliance-rule__note">From extension of property line into the lake. All waterfront structures.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Max Size per 100' Shoreline</div>
+          <div class="compliance-rule__value">1,000 sq ft</div>
+          <div class="compliance-rule__note">Floating dock, boathouse, wet slip. Walkways ≤6' wide excluded.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Max Length</div>
+          <div class="compliance-rule__value">150' or 1/4 water width</div>
+          <div class="compliance-rule__note">Whichever is less. Including moored vessels.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Min Spacing Between Docks</div>
+          <div class="compliance-rule__value">50 feet</div>
+          <div class="compliance-rule__note">Between multiple docks on the same property.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Boat Ramp Width</div>
+          <div class="compliance-rule__value">20' maximum</div>
+          <div class="compliance-rule__note">May extend "reasonable distance" from shoreline (APC discretion).</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Narrow Slough Rule</div>
+          <div class="compliance-rule__value">No more than 1/4 across</div>
+          <div class="compliance-rule__note">No structure may extend over 1/4 of the way across (incl. moored vessels) at full pool.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Full Pool Elevation</div>
+          <div class="compliance-rule__value">491' MSL (490' Martin Datum)</div>
+          <div class="compliance-rule__note">Lake Martin summer level. Fee ownership at same elevation.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Control Strip</div>
+          <div class="compliance-rule__value">30' from 491' MSL</div>
+          <div class="compliance-rule__note">AL Power easement where applicable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="compliance" style="margin-bottom:2.5rem">
+      <h3 class="compliance-title">Prohibited &amp; Restricted</h3>
+      <div class="compliance-grid">
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Prohibited on Fee/Easement Land</div>
+          <div class="compliance-rule__value">Pools, spas, hot tubs</div>
+          <div class="compliance-rule__note">In-ground or above-ground. No exceptions.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Covered Overwater Structures</div>
+          <div class="compliance-rule__value">Case-by-case approval</div>
+          <div class="compliance-rule__note">Must be documented in application. No guarantee of approval.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Flotation Material</div>
+          <div class="compliance-rule__value">Encased/closed-cell only</div>
+          <div class="compliance-rule__note">Must be marine-grade. Must not waterlog or sink when punctured.</div>
+        </div>
+        <div class="compliance-rule">
+          <div class="compliance-rule__label">Bank Stabilization</div>
+          <div class="compliance-rule__value">Riprap preferred</div>
+          <div class="compliance-rule__note">Seawalls case-by-case. Seawalls >1,000' need USACE pre-approval. Riprap required at toe.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fees -->
+    <div class="section-label">Fee Schedule</div>
+    <div class="compliance" style="margin-bottom:2.5rem">
+      <table class="fee-table">
+        <thead>
+          <tr><th>Fee</th><th>When</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Application — standard construction</td><td>End of Phase 2</td><td>$3,000</td></tr>
+          <tr><td>Application — gas pumps / 30+ slips / dry storage</td><td>End of Phase 2</td><td>$5,000</td></tr>
+          <tr><td>Annual boat slip fee (post-2020 permits)</td><td>Ongoing</td><td>$100/slip/yr</td></tr>
+          <tr><td>Permit modification</td><td>Before issuance</td><td>$1,500</td></tr>
+          <tr><td>Construction extension</td><td>90+ days before deadline</td><td>$1,500</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="hub-footer">
+      <p class="hub-footer-text">
+        Stonebranch Hub &ensp;·&ensp; Internal use only &ensp;·&ensp; Vulcan OZB, LLC &ensp;·&ensp;
+        Updated March 2026
+      </p>
+    </footer>
+
+  </div>
+
+  <div class="progress-counter" id="progress">
+    <span class="progress-counter__num" id="done-count">0</span> / <span id="total-count">0</span> items
+  </div>
+
+  <script>
+    // Persist checklist state in localStorage
+    const STORAGE_KEY = 'sb-dock-permit-checks';
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch {}
+
+    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    const items = document.querySelectorAll('.check-item');
+    const totalEl = document.getElementById('total-count');
+    const doneEl = document.getElementById('done-count');
+    totalEl.textContent = items.length;
+
+    function updateCount() {
+      const done = Object.values(state).filter(Boolean).length;
+      doneEl.textContent = done;
+    }
+
+    items.forEach(item => {
+      const key = item.dataset.key;
+      if (state[key]) item.classList.add('done');
+
+      item.addEventListener('click', () => {
+        state[key] = !state[key];
+        item.classList.toggle('done', state[key]);
+        save();
+        updateCount();
+      });
+    });
+
+    updateCount();
+  </script>
+</body>
+</html>
